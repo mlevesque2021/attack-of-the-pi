@@ -2,6 +2,7 @@ import math, random, sys
 import pygame
 from pygame.locals import *
 
+pygame.init()
 # exit the program
 def events():
 	for event in pygame.event.get():
@@ -18,7 +19,8 @@ def events():
 		else:
 			player.xVel = 0
 			player.yVel = 0
-
+			
+			
 # define display surface			
 W, H = 600, 280
 HW, HH = W / 2, H / 2
@@ -98,7 +100,7 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = player.x
 		self.y = player.y + 10
 		self.xVel = 0
-		self.yVel = -1
+		self.yVel = -5
 		self.spritesheet = spritesheet("bullet.png",1,1)
 		self.index = 7
 		
@@ -107,7 +109,7 @@ class Bullet(pygame.sprite.Sprite):
 
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
-		if self.y < -10:
+		if self.y < -20:
 			bullets.remove(self)
 
 		
@@ -116,10 +118,35 @@ bullets = []
 enemys = []
 
 CENTER_HANDLE = 4
+def events():
+	keys = pygame.key.get_pressed()
+	pygame.event.pump()
 
+
+
+	if keys[K_RIGHT]:
+		player.xVel = 1
+		
+	elif keys[K_LEFT]:
+		player.xVel = -1
+
+	else:
+		player.xVel = 0
+		player.yVel = 0
+
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT: 
+			sys.exit()	
+		if event.type == pygame.KEYDOWN:
+			if event.key==pygame.K_SPACE:
+				Bullet()
+def close():
+	pass
+		
 # main loop
 while True:
 	events()
+	close()
 
 	player.update()
 	

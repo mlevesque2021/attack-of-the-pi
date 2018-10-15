@@ -1,5 +1,7 @@
 from Tkinter import *
 import pygame
+import sys
+import pygame.sprite as sprite
 
 class Game(Frame):
     def __init__(self,master):
@@ -15,6 +17,7 @@ class Game(Frame):
 
         self.l = Label(master, image = self.img)
         self.l.pack(side = BOTTOM, fill=X)
+
         
 #starts the game
     def play(self):
@@ -24,6 +27,7 @@ class Game(Frame):
 #ends and exits the game
     def quit(self):
         self.master.destroy()
+
 
 class Stage(object):
     def __init__(self):
@@ -36,12 +40,6 @@ class Stage(object):
 
         pygame.display.flip()
 
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if (event.type == pygame.QUIT):
-                    running = False
-        pygame.quit()
 #########################################################################
 
 #Default window size
@@ -52,3 +50,26 @@ window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
 menu = Game(window)
 window.mainloop()
+
+
+
+
+running = True
+while running:
+    screen.blit(background,background_rect)
+    pygame.display.update()
+    for event in pygame.event.get():
+        if (event.type == pygame.QUIT):
+            running = False
+    y1 += 5
+    y += 5
+    screen.blit(background,(x,y))
+    screen.blit(background,(x1,y1))
+    if y > h:
+        y = -h
+    if y1 > h:
+        y1 = -h
+    pygame.display.flip()
+    pygame.display.update()
+    theClock.tick(10)
+pygame.quit()

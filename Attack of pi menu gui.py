@@ -45,6 +45,8 @@ class Stage(object):
         x1 = 0
         y1 = -h
 
+        #counter = 0
+
         running = True
 
         while running:
@@ -62,11 +64,21 @@ class Stage(object):
             if y1 > h:
                 y1 = -h
             pygame.display.flip()
+            #counter += 1
+            #score_counter(screen, "score: {}", counter)
             pygame.display.update()
             theClock.tick(10)
         pygame.quit()
 
+#def score_counter(screen, score, counter):
+    #textsurface = myfont.render(score.format(counter), False, (255, 255, 255))
+    #screen.blit(textsurface,(0,0))
+
+
 #########################################################################
+#pygame.font.init()
+#myfont = pygame.font.SysFont('Comic Sans MS', 30)
+
 
 #Default window size
 WIDTH = 500

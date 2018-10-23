@@ -2,7 +2,7 @@ from Tkinter import *
 import pygame
 import sys
 import pygame.sprite as sprite
-#import Spriteslib as Sprites
+import Spriteslib as Sprites
 
 class Game(Frame):
     def __init__(self,master):
@@ -46,9 +46,12 @@ class Stage(object):
         x1 = 0
         y1 = -h
 
+        Sprites.init()
+        player = Sprites.Player(300,270)
         running = True
 
         while running:
+            player.update()
             screen.blit(background,background_rect)
             pygame.display.update()
             for event in pygame.event.get():

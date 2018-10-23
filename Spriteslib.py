@@ -3,12 +3,13 @@ import pygame
 from pygame.locals import *
 
 def init():
+	pygame.init()
 	FPS = 60
 	current_Frame = 0
 	#define some groups
 	bullets = pygame.sprite.Group()
 	enemys = pygame.sprite.Group()
-	player = Player(HW,270)
+	player = Player(300,270)
 	CENTER_HANDLE = 4
 
 class spritesheet:
@@ -149,19 +150,4 @@ def events():
 				Enemy1(HW, 50)
 		
 # main loop
-while True:
-	events()
 
-	player.update()
-	bullets.update()
-	enemys.update()
-	
-	current_Frame = current_Frame + 1
-	if ((current_Frame % 60) == 0):
-		current_Frame = 0
-		
-	pygame.sprite.groupcollide(enemys, bullets, True, pygame.sprite.collide_mask)
-		
-	pygame.display.update()
-	CLOCK.tick(FPS)
-	screen.fill(BLACK)

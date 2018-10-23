@@ -2,6 +2,7 @@ from Tkinter import *
 import pygame
 import sys
 import pygame.sprite as sprite
+#import Spriteslib as Sprites
 
 class Game(Frame):
     def __init__(self,master):
@@ -76,6 +77,4 @@ window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
 menu = Game(window)
 window.mainloop()
-
-
 

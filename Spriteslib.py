@@ -1,7 +1,7 @@
 import math, random, sys
 import pygame
 from pygame.locals import *
-
+CENTER_HANDLE = 4
 def init():
 	pygame.init()
 	FPS = 60
@@ -9,8 +9,7 @@ def init():
 	#define some groups
 	bullets = pygame.sprite.Group()
 	enemys = pygame.sprite.Group()
-	player = Player(300,270)
-	CENTER_HANDLE = 4
+
 
 class spritesheet:
 	def __init__(self, filename, cols, rows):
@@ -40,8 +39,9 @@ class spritesheet:
 
 class Player(pygame.sprite.Sprite):
 
-	def __init__(self, x, y):
+	def __init__(self, x, y, screen):
 		pygame.sprite.Sprite.__init__(self)
+		self.screen = screen
 		self.x = x
 		self.y = y
 		self.xVel = 0
@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
 	def update(self):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
-		self.spritesheet.draw(screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
+		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		
 	@property
 	def xVel(self):
@@ -126,28 +126,5 @@ class Enemy1(Enemy):
 	def __init__(self, x, y):
 		Enemy.__init__(self, x, y)
 	
-def events():
-	keys = pygame.key.get_pressed()
-	#pygame.event.pump()
 
-	if keys[K_RIGHT]:
-		player.xVel = 1
-		
-	elif keys[K_LEFT]:
-		player.xVel = -1
-
-	else:
-		player.xVel = 0
-		player.yVel = 0
-
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT: 
-			sys.exit()	
-		if event.type == pygame.KEYDOWN:
-			if event.key==pygame.K_SPACE:
-				Bullet()
-			if event.key ==pygame.K_e:
-				Enemy1(HW, 50)
-		
-# main loop
 

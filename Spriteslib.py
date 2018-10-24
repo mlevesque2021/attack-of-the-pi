@@ -1,14 +1,14 @@
 import math, random, sys
 import pygame
 from pygame.locals import *
+
 CENTER_HANDLE = 4
-def init():
-	pygame.init()
-	FPS = 60
-	current_Frame = 0
-	#define some groups
-	bullets = pygame.sprite.Group()
-	enemys = pygame.sprite.Group()
+pygame.init()
+FPS = 60
+#define some groups
+bullets = pygame.sprite.Group()
+enemys = pygame.sprite.Group()
+
 
 
 class spritesheet:
@@ -73,9 +73,12 @@ class Player(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
 
-	def __init__(self, x, y):
+	
+	def __init__(self, x, y, screen):
 		pygame.sprite.Sprite.__init__(self)
 		enemys.add(self)
+		self.screen = screen
+		self.current_Frame = 0
 		self.x = x
 		self.y = y
 		self.xVel = 0
@@ -86,24 +89,30 @@ class Enemy(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
 		
+		
 	def idle (self):
-		if ((current_Frame % 10) == 0 and self.index == 6):
+		if ((self.current_Frame % 10) == 0 and self.index == 6):
 			self.index = 7
-		elif ((current_Frame % 10) == 0 and self.index == 7):
+		elif ((self.current_Frame % 10) == 0 and self.index == 7):
 			self.index = 6
 		
 	def update(self):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
-		self.spritesheet.draw(screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
+		self.current_Frame = self.current_Frame + 1
+		if ((self.current_Frame % 60) == 0):
+			self.current_Frame = 0
+
+		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.idle()
 		
 
 class Bullet(pygame.sprite.Sprite):
-	def __init__(self):
+	def __init__(self, player, screen):
 		pygame.sprite.Sprite.__init__(self)
 		bullets.add(self)
+		self.screen = screen
 		self.x = player.x
 		self.y = player.y + 10
 		self.xVel = 0
@@ -115,16 +124,17 @@ class Bullet(pygame.sprite.Sprite):
 		self.index = 1
 		
 	def update(self):
-		self.spritesheet.draw(screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
+		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		#self.mask.set_at((self.x, self.y))
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
+		pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask)
 		if self.y < -20:
 			bullets.remove(self)
 class Enemy1(Enemy):
-	def __init__(self, x, y):
-		Enemy.__init__(self, x, y)
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
 	
 
 

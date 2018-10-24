@@ -63,7 +63,7 @@ class Game(Frame):
 		y1 = -h
                 stage = Stage()
                 #Sprites.init()
-                self.player = Sprites.Player(300,270, screen)
+                self.player = Sprites.Player(250,450, screen)
                 running = True
                 while running:
                     screen.blit(background,background_rect)

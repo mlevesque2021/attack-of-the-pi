@@ -66,7 +66,7 @@ class Game(Frame):
                 self.player = Sprites.Player(250,450, screen)
                 running = True
                 while running:
-                    screen.blit(background,background_rect)
+                    #screen.blit(background,background_rect) ---- When the FPS was ramped up this was not needed and actually was the cause of our screen tearing
                     pygame.display.update()
                     y1 += 5
                     y += 5

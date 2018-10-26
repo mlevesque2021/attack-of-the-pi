@@ -4,7 +4,7 @@ from pygame.locals import *
 import sys
 import pygame.sprite as sprite
 import Spriteslib as Sprites
-		
+        
 #Sprites.init()
 FPS = 60
 class Game(Frame):
@@ -21,7 +21,7 @@ class Game(Frame):
 
                 self.l = Label(master, image = self.img)
                 self.l.pack(side = BOTTOM, fill=X)
-				
+                
 
 
         def events(self):
@@ -38,8 +38,9 @@ class Game(Frame):
                         self.player.yVel = 0
 
                 for event in pygame.event.get():
-                        if event.type == pygame.QUIT: 
-                                sys.exit()	
+                        if event.type == pygame.QUIT:
+                                global running
+                                running = False  
                         if event.type == pygame.KEYDOWN:
                                 if event.key==pygame.K_SPACE:
                                         Sprites.Bullet(self.player, screen)
@@ -49,21 +50,20 @@ class Game(Frame):
 #starts the game
         def play(self):
                 theClock = pygame.time.Clock()
-		background = pygame.image.load('background_image.gif')
-				
-		background_size = background.get_size()
-		background_rect = background.get_rect()
-		global screen
-		screen = pygame.display.set_mode(background_size)
-		w,h = background_size
+                background = pygame.image.load('background_image.gif')
+                background_size = background.get_size()
+                background_rect = background.get_rect()
+                global screen
+                screen = pygame.display.set_mode(background_size)
+                w,h = background_size
 
-		x = 0
-		y = 0
-		x1 = 0
-		y1 = -h
-                stage = Stage()
+                x = 0
+                y = 0
+                x1 = 0
+                y1 = -h
                 #Sprites.init()
-                self.player = Sprites.Player(250,450, screen)
+                self.player = Sprites.Player(250,430, screen)
+                global running
                 running = True
                 while running:
                     #screen.blit(background,background_rect) ---- When the FPS was ramped up this was not needed and actually was the cause of our screen tearing
@@ -92,9 +92,6 @@ class Game(Frame):
                 self.master.destroy()
 
 
-class Stage(object):
-        def __init__(self):
-                pass
 
 
 
@@ -109,4 +106,5 @@ window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
 menu = Game(window)
 window.mainloop()
+
 

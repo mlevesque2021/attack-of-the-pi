@@ -55,17 +55,17 @@ class Game(Frame):
                         pygame.event.pump()
                         
                         if fstatus == "YES":
-                                Bullet()
+                                Sprites.Bullet(self.player, screen)
 
                         if mstatus == "Right":
-                                player.xVel = 1
+                                self.player.xVel = 1
                                 
                         elif mstatus == "Left":
-                                player.xVel = -1
+                                self.player.xVel = -1
 
                         else:
-                                player.xVel = 0
-                                player.yVel = 0
+                                self.player.xVel = 0
+                                self.player.yVel = 0
 
                         for event in pygame.event.get():
                                 if event.type == pygame.QUIT: 

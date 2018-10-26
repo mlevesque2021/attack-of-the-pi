@@ -70,16 +70,16 @@ class Player(pygame.sprite.Sprite):
 	def yVel(self, value):
 		self._yVel = value
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy1(pygame.sprite.Sprite):
 
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
 		enemys.add(self)
-		self.x = x
-		self.y = y
-		self.xVel = 0
+		self.x = 0
+		self.y = 0
+		self.xVel = 1
 		self.yVel = 0
-		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
+		self.spritesheet = spritesheet("Sprites/enemy1.png",8,1)
 		self.image = pygame.image.load("Sprites/enemy collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
@@ -93,7 +93,8 @@ class Enemy(pygame.sprite.Sprite):
 		
 	def update(self):
 		self.x = self.x + self.xVel
-		self.y = self.y + self.yVel
+		print self.x
+		self.y = self.x**self.x
 		self.rect.center = ((self.x,self.y))
 		self.spritesheet.draw(screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.idle()
@@ -121,7 +122,7 @@ class Bullet(pygame.sprite.Sprite):
 		self.rect.center = ((self.x,self.y))
 		if self.y < -20:
 			bullets.remove(self)
-class Enemy1(Enemy):
+#class Enemy1(Enemy):
 	def __init__(self, x, y):
 		Enemy.__init__(self, x, y)
 	

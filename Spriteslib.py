@@ -1,6 +1,7 @@
 import math, random, sys
 import pygame
 from pygame.locals import *
+from random import randint
 
 CENTER_HANDLE = 4
 pygame.init()
@@ -8,6 +9,8 @@ FPS = 60
 #define some groups
 bullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
+xPos = [x * 48 for x in range(1,11)]
+yPos = [y * 20 for y in range (1,5)]
 
 
 
@@ -89,6 +92,22 @@ class Enemy(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
 		
+		@property
+		def xVel(self):
+			return self._xVel
+		
+		@xVel.setter
+		def xVel(self, value):
+			self._xVel = value
+			
+		@property
+		def yVel(self):
+			return self._yVel
+		
+		@yVel.setter
+		def yVel(self, value):
+			self._yVel = value	
+	
 		
 	def idle (self):
 		if ((self.current_Frame % 10) == 0 and self.index == 6):
@@ -97,8 +116,12 @@ class Enemy(pygame.sprite.Sprite):
 			self.index = 6
 		
 	def update(self):
-		self.x = self.x + self.xVel
-		self.y = self.y + self.yVel
+		if ((self.current_Frame % 12) == 0):
+			#self.xVel = (float(randint(1,51))-25)/6
+			self.xVel = randint(1,11)-5
+		if (((self.x + self.xVel) < 500) and ((self.x + self.xVel) > 0)):
+			self.x = self.x + self.xVel
+			self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
 		self.current_Frame = self.current_Frame + 1
 		if ((self.current_Frame % 60) == 0):
@@ -135,6 +158,41 @@ class Bullet(pygame.sprite.Sprite):
 class Enemy1(Enemy):
 	def __init__(self, x, y, screen):
 		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy1.png",8,1)
 	
-
+class Enemy2(Enemy):
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy2.png",8,1)
+		self.image = pygame.image.load("Sprites/collison2.png")
+		
+		
+class Enemy3(Enemy):
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
+		
+class Enemy4(Enemy):
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
+		self.image = pygame.image.load("Sprites/collison2.png")
+	
+def GenLevel(screen):
+	if not enemys :
+		for x in range (50):
+			PickEnemy(randint(0,4),xPos[randint(0,9)],yPos[randint(0,3)],screen)
+		
+def PickEnemy(i, x, y, screen):
+	if i == 0 :
+		Enemy1(x, y, screen)
+	if i == 1 :
+		Enemy2(x, y, screen)
+	if i == 2 :
+		Enemy3(x, y, screen)
+	if i == 3 :
+		Enemy4(x, y, screen)
+		
+		
+		
 

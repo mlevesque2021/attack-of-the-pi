@@ -52,32 +52,7 @@ class Game(Frame):
                 elif (Console == "PI"):
                         mstatus = Joystick.readChannel(1)
                         fstatus = Joystick.readChannel(0)
-                        pygame.event.pump()
-                        
-<<<<<<< HEAD
-                elif keys[K_LEFT]:
-                        self.player.xVel = -1
-
-                else:
-                        self.player.xVel = 0
-                        self.player.yVel = 0
-
-                for event in pygame.event.get():
-                        if event.type == pygame.QUIT: 
-                                sys.exit()	
-                        if event.type == pygame.KEYDOWN:
-                                if event.key==pygame.K_SPACE:
-                                        Sprites.Bullet(self.player, screen)
-                                if event.key ==pygame.K_e:
-                                        Sprites.Enemy1(200, 50, screen)
-					print 'boom'
-                                if event.key ==pygame.K_r:
-                                       Sprites.Enemy2(225, 50, screen)
-                                if event.key ==pygame.K_t:
-                                        Sprites.Enemy3(275, 50, screen)
-                                if event.key ==pygame.K_y:
-                                        Sprites.Enemy4(300, 50, screen)										
-=======
+                        pygame.event.pump()									
                         if fstatus == "YES":
                                 Sprites.Bullet(self.player, screen)
 
@@ -96,7 +71,6 @@ class Game(Frame):
                                         global running
                                         running = False
         
->>>>>>> 7b67cc970ddaf1f7f0ebe8dcf87a7011c12a6212
 #starts the game
         def play(self):
                 theClock = pygame.time.Clock()
@@ -123,12 +97,9 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
-<<<<<<< HEAD
-                    self.events()
-                    Sprites.GenLevel(screen)
-=======
                     self.events(Console)
->>>>>>> 7b67cc970ddaf1f7f0ebe8dcf87a7011c12a6212
+                    Sprites.GenLevel(screen)
+                    self.events(Console)
                     self.player.update()
                     Sprites.bullets.update()
                     Sprites.enemys.update()

@@ -4,7 +4,9 @@ from pygame.locals import *
 import sys
 import pygame.sprite as sprite
 import Spriteslib as Sprites
-        
+#import joystickLibv2 as Joystick
+Console = "PC"
+
 #Sprites.init()
 FPS = 60
 class Game(Frame):
@@ -24,28 +26,51 @@ class Game(Frame):
                 
 
 
-        def events(self):
-                keys = pygame.key.get_pressed()
+        def events(self, Console):
+                if (Console == "PC"):
+                        keys = pygame.key.get_pressed()
 
-                if keys[K_RIGHT]:
-                        self.player.xVel = 1
+                        if keys[K_RIGHT]:
+                                self.player.xVel = 1
+                                
+                        elif keys[K_LEFT]:
+                                self.player.xVel = -1
+
+                        else:
+                                self.player.xVel = 0
+                                self.player.yVel = 0
+
+                        for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                        global running
+                                        running = False  
+                                if event.type == pygame.KEYDOWN:
+                                        if event.key==pygame.K_SPACE:
+                                                Sprites.Bullet(self.player, screen)
+                                        if event.key ==pygame.K_e:
+                                                Sprites.Enemy1(300, 50, screen)
+                elif (Console == "PI"):
+                        mstatus = Joystick.readChannel(1)
+                        fstatus = Joystick.readChannel(0)
+                        pygame.event.pump()
                         
-                elif keys[K_LEFT]:
-                        self.player.xVel = -1
+                        if fstatus == "YES":
+                                Bullet()
 
-                else:
-                        self.player.xVel = 0
-                        self.player.yVel = 0
+                        if mstatus == "Right":
+                                player.xVel = 1
+                                
+                        elif mstatus == "Left":
+                                player.xVel = -1
 
-                for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                                global running
-                                running = False  
-                        if event.type == pygame.KEYDOWN:
-                                if event.key==pygame.K_SPACE:
-                                        Sprites.Bullet(self.player, screen)
-                                if event.key ==pygame.K_e:
-                                        Sprites.Enemy1(300, 50, screen)
+                        else:
+                                player.xVel = 0
+                                player.yVel = 0
+
+                        for event in pygame.event.get():
+                                if event.type == pygame.QUIT: 
+                                        global running
+                                        running = False
         
 #starts the game
         def play(self):
@@ -64,6 +89,7 @@ class Game(Frame):
                 #Sprites.init()
                 self.player = Sprites.Player(250,430, screen)
                 global running
+                global Console
                 running = True
                 while running:
                     #screen.blit(background,background_rect) ---- When the FPS was ramped up this was not needed and actually was the cause of our screen tearing
@@ -72,7 +98,7 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
-                    self.events()
+                    self.events(Console)
                     self.player.update()
                     Sprites.bullets.update()
                     Sprites.enemys.update()

@@ -9,6 +9,8 @@ FPS = 60
 #define some groups
 bullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
+xPos = [x * 48 for x in range(1,11)]
+yPos = [y * 20 for y in range (1,5)]
 
 
 
@@ -114,9 +116,12 @@ class Enemy(pygame.sprite.Sprite):
 			self.index = 6
 		
 	def update(self):
-		self.xVel = (float(randint(1,51))-25)//10
-		self.x = self.x + self.xVel
-		self.y = self.y + self.yVel
+		if ((self.current_Frame % 12) == 0):
+			#self.xVel = (float(randint(1,51))-25)/6
+			self.xVel = randint(1,11)-5
+		if (((self.x + self.xVel) < 500) and ((self.x + self.xVel) > 0)):
+			self.x = self.x + self.xVel
+			self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
 		self.current_Frame = self.current_Frame + 1
 		if ((self.current_Frame % 60) == 0):
@@ -175,6 +180,19 @@ class Enemy4(Enemy):
 	
 def GenLevel(screen):
 	if not enemys :
-		print "new level"
-		Enemy1(300,50,screen)
+		for x in range (50):
+			PickEnemy(randint(0,4),xPos[randint(0,9)],yPos[randint(0,3)],screen)
+		
+def PickEnemy(i, x, y, screen):
+	if i == 0 :
+		Enemy1(x, y, screen)
+	if i == 1 :
+		Enemy2(x, y, screen)
+	if i == 2 :
+		Enemy3(x, y, screen)
+	if i == 3 :
+		Enemy4(x, y, screen)
+		
+		
+		
 

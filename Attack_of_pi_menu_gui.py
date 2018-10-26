@@ -80,7 +80,7 @@ class Game(Frame):
                     screen.blit(background,(x1,y1))
                     self.events()
                     Sprites.GenLevel(screen)
-                    #self.player.update()
+                    self.player.update()
                     Sprites.bullets.update()
                     Sprites.enemys.update()
                     if y > h:

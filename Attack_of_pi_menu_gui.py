@@ -44,8 +44,14 @@ class Game(Frame):
                                 if event.key==pygame.K_SPACE:
                                         Sprites.Bullet(self.player, screen)
                                 if event.key ==pygame.K_e:
-                                        Sprites.Enemy1(300, 50, screen)
-        
+                                        Sprites.Enemy1(200, 50, screen)
+					print 'boom'
+                                if event.key ==pygame.K_r:
+                                       Sprites.Enemy2(225, 50, screen)
+                                if event.key ==pygame.K_t:
+                                        Sprites.Enemy3(275, 50, screen)
+                                if event.key ==pygame.K_y:
+                                        Sprites.Enemy4(300, 50, screen)										
 #starts the game
         def play(self):
                 theClock = pygame.time.Clock()

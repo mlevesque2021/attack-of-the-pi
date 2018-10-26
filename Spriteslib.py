@@ -135,6 +135,25 @@ class Bullet(pygame.sprite.Sprite):
 class Enemy1(Enemy):
 	def __init__(self, x, y, screen):
 		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy1.png",8,1)
+	
+class Enemy2(Enemy):
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy2.png",8,1)
+		self.image = pygame.image.load("Sprites/collison2.png")
+		
+		
+class Enemy3(Enemy):
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
+		
+class Enemy4(Enemy):
+	def __init__(self, x, y, screen):
+		Enemy.__init__(self, x, y, screen)
+		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
+		self.image = pygame.image.load("Sprites/collison2.png")
 	
 
 

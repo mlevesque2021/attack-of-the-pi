@@ -1,6 +1,7 @@
 import math, random, sys
 import pygame
 from pygame.locals import *
+from random import randint
 
 CENTER_HANDLE = 4
 pygame.init()
@@ -89,6 +90,22 @@ class Enemy(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
 		
+		@property
+		def xVel(self):
+			return self._xVel
+		
+		@xVel.setter
+		def xVel(self, value):
+			self._xVel = value
+			
+		@property
+		def yVel(self):
+			return self._yVel
+		
+		@yVel.setter
+		def yVel(self, value):
+			self._yVel = value	
+	
 		
 	def idle (self):
 		if ((self.current_Frame % 10) == 0 and self.index == 6):
@@ -97,6 +114,7 @@ class Enemy(pygame.sprite.Sprite):
 			self.index = 6
 		
 	def update(self):
+		self.xVel = (float(randint(1,51))-25)//10
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
@@ -155,5 +173,8 @@ class Enemy4(Enemy):
 		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
 		self.image = pygame.image.load("Sprites/collison2.png")
 	
-
+def GenLevel(screen):
+	if not enemys :
+		print "new level"
+		Enemy1(300,50,screen)
 

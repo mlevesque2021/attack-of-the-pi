@@ -16,13 +16,15 @@ delay = 0.1
 # open a serial connection to the mcp
 spi = spidev.SpiDev()
 spi.open(0,0)
- 
+
+a = 0
 # function that recieves channel number and ouputs Joystick Pos and Button Status
 def readChannel(channel):
   val = spi.xfer2([1,(8+channel)<<4,0])
   data = ((val[1]&3) << 8) + val[2]
   mStatus = ""
   fStatus = "NO"
+  global a
   if channel == 1:
     if data in range(500, 580):
       mStatus = "False"
@@ -31,8 +33,13 @@ def readChannel(channel):
     else:
       mStatus = "Right"
   elif channel == 0:
-    if data == 1023:
+    if (data == 1023) and (a == 0):
       fStatus = "YES"
+      a = a+1
+      
+    elif (data == 0):
+      a = 0
+      return "NO"
     return fStatus
   return mStatus
 

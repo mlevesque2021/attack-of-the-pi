@@ -9,7 +9,7 @@ FPS = 60
 #define some groups
 bullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
-xPos = [x * 48 for x in range(1,11)]
+xPos = [x * 48 for x in range(1,20)]
 yPos = [y * 20 for y in range (1,5)]
 
 
@@ -119,7 +119,7 @@ class Enemy(pygame.sprite.Sprite):
 		if ((self.current_Frame % 12) == 0):
 			#self.xVel = (float(randint(1,51))-25)/6
 			self.xVel = randint(1,11)-5
-		if (((self.x + self.xVel) < 500) and ((self.x + self.xVel) > 0)):
+		if (((self.x + self.xVel) < 790) and ((self.x + self.xVel) > 0)):
 			self.x = self.x + self.xVel
 			self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))

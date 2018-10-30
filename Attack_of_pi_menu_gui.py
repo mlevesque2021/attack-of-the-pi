@@ -7,10 +7,14 @@ import Spriteslib as Sprites
 #import joystickLibv2 as Joystick
 Console = "PC"
 
+
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 20)
+
 #Sprites.init()
 FPS = 60
 class Game(Frame):
-        def __init__(self,master):
+        def __init__(self,master, score, lives):
                 Frame.__init__(self,master)
 
                 self.startbutton = Button(master, text = "START", fg = "white",bg = "green",  command = self.play, height = 2)
@@ -23,7 +27,24 @@ class Game(Frame):
 
                 self.l = Label(master, image = self.img)
                 self.l.pack(side = BOTTOM, fill=X)
-                
+                self.score = score
+                self.lives = lives
+
+        @property
+        def score(self):
+                return self._score
+
+        @score.setter
+        def score(self, value):
+                self._score = value
+
+        @property
+        def lives(self):
+                return self._lives
+        
+        @lives.setter
+        def lives(self, value):
+                self._lives = value
 
 
         def events(self, Console):
@@ -71,6 +92,11 @@ class Game(Frame):
                                         global running
                                         running = False
         
+
+
+
+
+
 #starts the game
         def play(self):
                 theClock = pygame.time.Clock()
@@ -97,6 +123,8 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
+                    score_counter(screen, self.score)
+                    life_counter(screen, self.lives)
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
@@ -120,9 +148,13 @@ class Game(Frame):
 
 
 
+def score_counter(screen, score):
+        textsurface = myfont.render("Score = {}".format(score), False, (255, 255, 255))
+        screen.blit(textsurface,(0,420))
 
-
-
+def life_counter(screen, lives):
+        textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
+        screen.blit(textsurface,(700,420))
 #########################################################################
 
 #Default window size
@@ -131,7 +163,12 @@ HEIGHT = 550
 window = Tk()
 window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
-menu = Game(window)
+menu = Game(window, score= 0, lives= 10)
 window.mainloop()
 
 
+
+
+
+
+#########################################################################

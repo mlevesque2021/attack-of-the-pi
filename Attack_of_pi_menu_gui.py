@@ -123,8 +123,8 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
-                    score_counter(screen, "Score = ", 5)
-                    life_counter(screen, "Lives = ", 5)
+                    score_counter(screen, self.score)
+                    life_counter(screen, self.lives)
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
@@ -148,13 +148,13 @@ class Game(Frame):
 
 
 
-def score_counter(screen, score, Score):
-        textsurface = myfont.render(score.format(Score), False, (255, 255, 255))
-        screen.blit(textsurface,(0,0))
+def score_counter(screen, score):
+        textsurface = myfont.render("Score = {}".format(score), False, (255, 255, 255))
+        screen.blit(textsurface,(0,420))
 
-def life_counter(screen, life, Life):
-        textsurface = myfont.render(life.format(Life), False, (255, 255, 255))
-        screen.blit(textsurface,(700,400))
+def life_counter(screen, lives):
+        textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
+        screen.blit(textsurface,(700,420))
 #########################################################################
 
 #Default window size
@@ -163,7 +163,7 @@ HEIGHT = 550
 window = Tk()
 window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
-menu = Game(window)
+menu = Game(window, score= 0, lives= 10)
 window.mainloop()
 
 

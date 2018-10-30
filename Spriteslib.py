@@ -161,10 +161,14 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
-		if pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask):
-			print 'enemy dies'
 		if self.y < -20:
 			bullets.remove(self)
+			
+	def enemyDeath(self):
+		if pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask):
+			return True
+		else:
+			return False
 
 class EnemyBullet(pygame.sprite.Sprite):
 	def __init__(self, enemy, screen):

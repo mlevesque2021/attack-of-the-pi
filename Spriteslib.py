@@ -1,4 +1,4 @@
-import math, random, sys
+import random
 import pygame
 from pygame.locals import *
 from random import randint
@@ -10,7 +10,7 @@ FPS = 60
 bullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
 players = pygame.sprite.Group()
-xPos = [x * 48 for x in range(1,20)]
+xPos = [x * 48 for x in range(2,20)]
 yPos = [y * 20 for y in range (1,5)]
 
 
@@ -62,6 +62,7 @@ class Player(pygame.sprite.Sprite):
 		if (((self.x + self.xVel) > 90) and ((self.x + self.xVel) < 700)):
 			self.x = self.x + self.xVel
 			self.y = self.y + self.yVel
+		self.rect.center = ((self.x,self.y))
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		
 	@property
@@ -186,7 +187,7 @@ class EnemyBullet(pygame.sprite.Sprite):
 		self.rect.center = ((self.x,self.y))
 		if pygame.sprite.spritecollide(self, players, True, pygame.sprite.collide_mask):
 			print 'player died'
-		if self.y < 500:
+		if self.y > 500:
 			bullets.remove(self)
 
 class Enemy1(Enemy):

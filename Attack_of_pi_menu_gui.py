@@ -128,7 +128,7 @@ class Game(Frame):
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
-                    self.player.update()
+                    Sprites.players.update()
                     Sprites.bullets.update()
                     Sprites.enemys.update()
                     if y > h:

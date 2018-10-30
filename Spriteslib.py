@@ -12,6 +12,7 @@ enemys = pygame.sprite.Group()
 players = pygame.sprite.Group()
 xPos = [x * 48 for x in range(2,20)]
 yPos = [y * 20 for y in range (1,5)]
+level = 0
 
 
 
@@ -185,8 +186,7 @@ class EnemyBullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
-		if pygame.sprite.spritecollide(self, players, True, pygame.sprite.collide_mask):
-			print 'player died'
+		#pygame.sprite.spritecollide(self, players, True, pygame.sprite.collide_mask)
 		if self.y > 500:
 			bullets.remove(self)
 
@@ -214,9 +214,11 @@ class Enemy4(Enemy):
 		self.image = pygame.image.load("Sprites/collison2.png")
 	
 def GenLevel(screen):
+	difficuly = (level * 5) + 10
 	if not enemys :
-		for x in range (50):
+		for x in range (difficuly):
 			PickEnemy(randint(0,4),xPos[randint(0,9)],yPos[randint(0,3)],screen)
+			level =  level + 1
 		
 def PickEnemy(i, x, y, screen):
 	if i == 0 :

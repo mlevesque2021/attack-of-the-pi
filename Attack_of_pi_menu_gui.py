@@ -7,6 +7,10 @@ import Spriteslib as Sprites
 #import joystickLibv2 as Joystick
 Console = "PC"
 
+
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 20)
+
 #Sprites.init()
 FPS = 60
 class Game(Frame):
@@ -71,6 +75,11 @@ class Game(Frame):
                                         global running
                                         running = False
         
+
+
+
+
+
 #starts the game
         def play(self):
                 theClock = pygame.time.Clock()
@@ -97,6 +106,7 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
+                    score_counter(screen, "Lives = ", 5)
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
@@ -120,7 +130,9 @@ class Game(Frame):
 
 
 
-
+def score_counter(screen, score, Score):
+        textsurface = myfont.render(score.format(Score), False, (255, 255, 255))
+        screen.blit(textsurface,(0,0))
 
 
 #########################################################################
@@ -135,3 +147,8 @@ menu = Game(window)
 window.mainloop()
 
 
+
+
+
+
+#########################################################################

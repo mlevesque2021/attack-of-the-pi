@@ -1,15 +1,24 @@
 from Tkinter import *
 import pygame
 from pygame.locals import *
-import sys
+#import sys
 import pygame.sprite as sprite
 import Spriteslib as Sprites
+import shelve
 #import joystickLibv2 as Joystick
 Console = "PC"
 
 
+def read_high_score():
+        s = open("score.txt", "r")
+        if (s.mode == 'r'):
+                data = s.read()
+        return data
+
+
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 20)
+highscore = read_high_score()
 
 #Sprites.init()
 FPS = 60
@@ -64,7 +73,8 @@ class Game(Frame):
                         for event in pygame.event.get():
                                 if event.type == pygame.QUIT:
                                         global running
-                                        running = False  
+                                        running = False
+                                        high_score(self.score)  
                                 if event.type == pygame.KEYDOWN:
                                         if event.key==pygame.K_SPACE:
                                                 Sprites.Bullet(self.player, screen)
@@ -155,6 +165,11 @@ def score_counter(screen, score):
 def life_counter(screen, lives):
         textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
         screen.blit(textsurface,(700,420))
+def high_score(score):
+        s = open("score.txt","w+")#this opens up the file 
+        s.write(str(score))
+        s.close()
+
 #########################################################################
 
 #Default window size

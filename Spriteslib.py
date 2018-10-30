@@ -1,4 +1,4 @@
-import math, random, sys
+import random
 import pygame
 from pygame.locals import *
 from random import randint
@@ -9,7 +9,8 @@ FPS = 60
 #define some groups
 bullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
-xPos = [x * 48 for x in range(1,20)]
+players = pygame.sprite.Group()
+xPos = [x * 48 for x in range(2,20)]
 yPos = [y * 20 for y in range (1,5)]
 
 
@@ -44,18 +45,24 @@ class Player(pygame.sprite.Sprite):
 
 	def __init__(self, x, y, screen):
 		pygame.sprite.Sprite.__init__(self)
+		players.add(self)
 		self.screen = screen
 		self.x = x
 		self.y = y
 		self.xVel = 0
 		self.yVel = 0
 		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("Sprites/player collison.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
 		
 		self.index = 7
 		
 	def update(self):
-		self.x = self.x + self.xVel
-		self.y = self.y + self.yVel
+		if (((self.x + self.xVel) > 90) and ((self.x + self.xVel) < 700)):
+			self.x = self.x + self.xVel
+			self.y = self.y + self.yVel
+		self.rect.center = ((self.x,self.y))
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		
 	@property
@@ -92,34 +99,35 @@ class Enemy(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
 		
-		@property
-		def xVel(self):
-			return self._xVel
+	@property
+	def xVel(self):
+		return self._xVel
+	
+	@xVel.setter
+	def xVel(self, value):
+		self._xVel = value
 		
-		@xVel.setter
-		def xVel(self, value):
-			self._xVel = value
-			
-		@property
-		def yVel(self):
-			return self._yVel
-		
-		@yVel.setter
-		def yVel(self, value):
-			self._yVel = value	
+	@property
+	def yVel(self):
+		return self._yVel
+	
+	@yVel.setter
+	def yVel(self, value):
+		self._yVel = value	
 	
 		
 	def idle (self):
 		if ((self.current_Frame % 10) == 0 and self.index == 6):
 			self.index = 7
+			self.shoot()
 		elif ((self.current_Frame % 10) == 0 and self.index == 7):
 			self.index = 6
 		
 	def update(self):
 		if ((self.current_Frame % 12) == 0):
 			#self.xVel = (float(randint(1,51))-25)/6
-			self.xVel = randint(1,11)-5
-		if (((self.x + self.xVel) < 790) and ((self.x + self.xVel) > 0)):
+			self.xVel = randint(1,11)-6
+		if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90)):
 			self.x = self.x + self.xVel
 			self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
@@ -129,7 +137,8 @@ class Enemy(pygame.sprite.Sprite):
 
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.idle()
-		
+	def shoot(self):
+		EnemyBullet(self, self.screen)
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, player, screen):
@@ -155,6 +164,32 @@ class Bullet(pygame.sprite.Sprite):
 		pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask)
 		if self.y < -20:
 			bullets.remove(self)
+
+class EnemyBullet(pygame.sprite.Sprite):
+	def __init__(self, enemy, screen):
+		pygame.sprite.Sprite.__init__(self)
+		bullets.add(self)
+		self.screen = screen
+		self.x = enemy.x
+		self.y = enemy.y - 10
+		self.xVel = 0
+		self.yVel = 5
+		self.spritesheet = spritesheet("Sprites/EnemyBullet.png",1,1)
+		self.image = pygame.image.load("Sprites/bullet.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
+		self.index = 1
+		
+	def update(self):
+		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
+		self.x = self.x + self.xVel
+		self.y = self.y + self.yVel
+		self.rect.center = ((self.x,self.y))
+		if pygame.sprite.spritecollide(self, players, True, pygame.sprite.collide_mask):
+			print 'player died'
+		if self.y > 500:
+			bullets.remove(self)
+
 class Enemy1(Enemy):
 	def __init__(self, x, y, screen):
 		Enemy.__init__(self, x, y, screen)

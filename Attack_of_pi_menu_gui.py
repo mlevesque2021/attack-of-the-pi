@@ -61,10 +61,10 @@ class Game(Frame):
                         keys = pygame.key.get_pressed()
 
                         if keys[K_RIGHT]:
-                                self.player.xVel = 1
+                                self.player.xVel = 5
                                 
                         elif keys[K_LEFT]:
-                                self.player.xVel = -1
+                                self.player.xVel = -5
 
                         else:
                                 self.player.xVel = 0
@@ -138,7 +138,7 @@ class Game(Frame):
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
-                    self.player.update()
+                    Sprites.players.update()
                     Sprites.bullets.update()
                     Sprites.enemys.update()
                     if y > h:

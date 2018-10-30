@@ -166,6 +166,7 @@ class Game(Frame):
         def life_counter(self, screen, lives):
                 textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
                 screen.blit(textsurface,(700,420))
+                
         def high_score(self, score):
                 s = open("score.txt","w+")#this opens up the file 
                 s.write(str(score))
@@ -188,7 +189,7 @@ HEIGHT = 550
 window = Tk()
 window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
-menu = Game(window, score= 10, lives= 10, waves = 1)
+menu = Game(window, score= 0, lives= 10, waves = 1)
 window.mainloop()
 
 

@@ -23,7 +23,7 @@ highscore = read_high_score()
 #Sprites.init()
 FPS = 60
 class Game(Frame):
-        def __init__(self,master, score, lives):
+        def __init__(self,master, score, lives, waves):
                 Frame.__init__(self,master)
 
                 self.startbutton = Button(master, text = "START", fg = "white",bg = "green",  command = self.play, height = 2)
@@ -38,6 +38,7 @@ class Game(Frame):
                 self.l.pack(side = BOTTOM, fill=X)
                 self.score = score
                 self.lives = lives
+                self.waves = waves
 
         @property
         def score(self):
@@ -54,6 +55,14 @@ class Game(Frame):
         @lives.setter
         def lives(self, value):
                 self._lives = value
+
+        @property
+        def waves(self):
+                return self._waves
+        
+        @waves.setter
+        def waves(self, value):
+                self._waves = value
 
 
         def events(self, Console):
@@ -136,7 +145,7 @@ class Game(Frame):
                     self.score_counter(screen, self.score)
                     self.life_counter(screen, self.lives)
                     self.events(Console)
-                    Sprites.GenLevel(screen)
+                    Sprites.GenLevel(screen, self.waves)
                     self.events(Console)
                     Sprites.players.update()
                     Sprites.bullets.update()
@@ -179,7 +188,7 @@ HEIGHT = 550
 window = Tk()
 window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
-menu = Game(window, score= 0, lives= 10)
+menu = Game(window, score= 10, lives= 10, waves = 1)
 window.mainloop()
 
 

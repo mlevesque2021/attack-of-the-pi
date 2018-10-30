@@ -14,7 +14,7 @@ myfont = pygame.font.SysFont('Comic Sans MS', 20)
 #Sprites.init()
 FPS = 60
 class Game(Frame):
-        def __init__(self,master):
+        def __init__(self,master, score, lives):
                 Frame.__init__(self,master)
 
                 self.startbutton = Button(master, text = "START", fg = "white",bg = "green",  command = self.play, height = 2)
@@ -27,7 +27,24 @@ class Game(Frame):
 
                 self.l = Label(master, image = self.img)
                 self.l.pack(side = BOTTOM, fill=X)
-                
+                self.score = score
+                self.lives = lives
+
+        @property
+        def score(self):
+                return self._score
+
+        @score.setter
+        def score(self, value):
+                self._score = value
+
+        @property
+        def lives(self):
+                return self._lives
+        
+        @lives.setter
+        def lives(self, value):
+                self._lives = value
 
 
         def events(self, Console):
@@ -106,7 +123,8 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
-                    score_counter(screen, "Lives = ", 5)
+                    score_counter(screen, "Score = ", 5)
+                    life_counter(screen, "Lives = ", 5)
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
@@ -134,7 +152,9 @@ def score_counter(screen, score, Score):
         textsurface = myfont.render(score.format(Score), False, (255, 255, 255))
         screen.blit(textsurface,(0,0))
 
-
+def life_counter(screen, life, Life):
+        textsurface = myfont.render(life.format(Life), False, (255, 255, 255))
+        screen.blit(textsurface,(700,400))
 #########################################################################
 
 #Default window size

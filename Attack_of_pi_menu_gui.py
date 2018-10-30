@@ -74,7 +74,7 @@ class Game(Frame):
                                 if event.type == pygame.QUIT:
                                         global running
                                         running = False
-                                        high_score(self.score)  
+                                        self.high_score(self.score)  
                                 if event.type == pygame.KEYDOWN:
                                         if event.key==pygame.K_SPACE:
                                                 Sprites.Bullet(self.player, screen)
@@ -133,8 +133,8 @@ class Game(Frame):
                     y += 5
                     screen.blit(background,(x,y))
                     screen.blit(background,(x1,y1))
-                    score_counter(screen, self.score)
-                    life_counter(screen, self.lives)
+                    self.score_counter(screen, self.score)
+                    self.life_counter(screen, self.lives)
                     self.events(Console)
                     Sprites.GenLevel(screen)
                     self.events(Console)
@@ -150,6 +150,17 @@ class Game(Frame):
                     theClock.tick(FPS)
                 pygame.quit()
 
+        def score_counter(self, screen, score):
+                textsurface = myfont.render("Score = {}".format(score), False, (255, 255, 255))
+                screen.blit(textsurface,(0,420))
+
+        def life_counter(self, screen, lives):
+                textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
+                screen.blit(textsurface,(700,420))
+        def high_score(self, score):
+                s = open("score.txt","w+")#this opens up the file 
+                s.write(str(score))
+                s.close()
  
         
 #ends and exits the game
@@ -158,17 +169,7 @@ class Game(Frame):
 
 
 
-def score_counter(screen, score):
-        textsurface = myfont.render("Score = {}".format(score), False, (255, 255, 255))
-        screen.blit(textsurface,(0,420))
 
-def life_counter(screen, lives):
-        textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
-        screen.blit(textsurface,(700,420))
-def high_score(score):
-        s = open("score.txt","w+")#this opens up the file 
-        s.write(str(score))
-        s.close()
 
 #########################################################################
 

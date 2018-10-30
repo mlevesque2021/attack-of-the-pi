@@ -12,7 +12,6 @@ enemys = pygame.sprite.Group()
 players = pygame.sprite.Group()
 xPos = [x * 48 for x in range(2,20)]
 yPos = [y * 20 for y in range (1,5)]
-level = 0
 
 
 
@@ -213,7 +212,7 @@ class Enemy4(Enemy):
 		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
 		self.image = pygame.image.load("Sprites/collison2.png")
 	
-def GenLevel(screen):
+def GenLevel(screen, level):
 	difficuly = (level * 5) + 10
 	if not enemys :
 		for x in range (difficuly):

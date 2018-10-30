@@ -31,10 +31,10 @@ class Game(Frame):
                         keys = pygame.key.get_pressed()
 
                         if keys[K_RIGHT]:
-                                self.player.xVel = 1
+                                self.player.xVel = 5
                                 
                         elif keys[K_LEFT]:
-                                self.player.xVel = -1
+                                self.player.xVel = -5
 
                         else:
                                 self.player.xVel = 0

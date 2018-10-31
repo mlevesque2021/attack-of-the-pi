@@ -150,6 +150,17 @@ class Game(Frame):
                     Sprites.players.update()
                     Sprites.bullets.update()
                     Sprites.enemys.update()
+                    Sprites.enemyBullets.update()
+                    if Sprites.enemyDeath():
+						self.score = self.score + 5
+						print "enemy died"
+                    if Sprites.playerDeath():
+                        if self.lives > 0:
+                            self.lives = self.lives - 1
+                            self.player = Sprites.Player(250,430, screen)
+                            print "player died"
+                        else:
+							print "GAME OVER"
                     if y > h:
                         y = -h
                     if y1 > h:

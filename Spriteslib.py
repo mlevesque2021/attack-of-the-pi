@@ -8,6 +8,7 @@ pygame.init()
 FPS = 60
 #define some groups
 bullets = pygame.sprite.Group()
+enemyBullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
 players = pygame.sprite.Group()
 xPos = [x * 48 for x in range(2,20)]
@@ -84,10 +85,11 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
 
 	
-	def __init__(self, x, y, screen):
+	def __init__(self, x, y, screen, level):
 		pygame.sprite.Sprite.__init__(self)
 		enemys.add(self)
 		self.screen = screen
+		self.level = level
 		self.current_Frame = 0
 		self.x = x
 		self.y = y
@@ -137,8 +139,12 @@ class Enemy(pygame.sprite.Sprite):
 
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.idle()
+
 	def shoot(self):
-		EnemyBullet(self, self.screen)
+		ran = randint(0,30)
+		if ran == 1:
+			EnemyBullet(self, self.screen)
+		
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, player, screen):
@@ -161,19 +167,15 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
+		#pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask)
 		if self.y < -20:
 			bullets.remove(self)
-			
-	def enemyDeath(self):
-		if pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask):
-			return True
-		else:
-			return False
+
 
 class EnemyBullet(pygame.sprite.Sprite):
 	def __init__(self, enemy, screen):
 		pygame.sprite.Sprite.__init__(self)
-		bullets.add(self)
+		enemyBullets.add(self)
 		self.screen = screen
 		self.x = enemy.x
 		self.y = enemy.y - 10
@@ -195,25 +197,25 @@ class EnemyBullet(pygame.sprite.Sprite):
 			bullets.remove(self)
 
 class Enemy1(Enemy):
-	def __init__(self, x, y, screen):
-		Enemy.__init__(self, x, y, screen)
+	def __init__(self, x, y, screen, level):
+		Enemy.__init__(self, x, y, screen, level)
 		self.spritesheet = spritesheet("Sprites/enemy1.png",8,1)
 	
 class Enemy2(Enemy):
-	def __init__(self, x, y, screen):
-		Enemy.__init__(self, x, y, screen)
+	def __init__(self, x, y, screen, level):
+		Enemy.__init__(self, x, y, screen, level)
 		self.spritesheet = spritesheet("Sprites/enemy2.png",8,1)
 		self.image = pygame.image.load("Sprites/collison2.png")
 		
 		
 class Enemy3(Enemy):
-	def __init__(self, x, y, screen):
-		Enemy.__init__(self, x, y, screen)
+	def __init__(self, x, y, screen, level):
+		Enemy.__init__(self, x, y, screen, level)
 		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
 		
 class Enemy4(Enemy):
-	def __init__(self, x, y, screen):
-		Enemy.__init__(self, x, y, screen)
+	def __init__(self, x, y, screen, level):
+		Enemy.__init__(self, x, y, screen, level)
 		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
 		self.image = pygame.image.load("Sprites/collison2.png")
 	
@@ -221,19 +223,30 @@ def GenLevel(screen, level):
 	difficuly = (level * 5) + 10
 	if not enemys :
 		for x in range (difficuly):
-			PickEnemy(randint(0,4),xPos[randint(0,9)],yPos[randint(0,3)],screen)
+			PickEnemy(randint(0,4),xPos[randint(0,9)],yPos[randint(0,3)],screen,level)
 			level =  level + 1
 		
-def PickEnemy(i, x, y, screen):
+def PickEnemy(i, x, y, screen, level):
 	if i == 0 :
-		Enemy1(x, y, screen)
+		Enemy1(x, y, screen, level)
 	if i == 1 :
-		Enemy2(x, y, screen)
+		Enemy2(x, y, screen, level)
 	if i == 2 :
-		Enemy3(x, y, screen)
+		Enemy3(x, y, screen, level)
 	if i == 3 :
-		Enemy4(x, y, screen)
+		Enemy4(x, y, screen, level)
 		
+def enemyDeath():
+	if pygame.sprite.groupcollide(bullets, enemys, True, pygame.sprite.collide_mask):
+		return True
+	else:
+		return False
 		
+def playerDeath():
+	if pygame.sprite.groupcollide(enemyBullets, players, True, pygame.sprite.collide_mask):
+		return True
+	else:
+		return False
+	
 		
 

@@ -4,7 +4,7 @@ from pygame.locals import *
 from random import randint
 
 CENTER_HANDLE = 4
-#pygame.init()
+pygame.init()
 #define some groups
 bullets = pygame.sprite.Group()
 enemyBullets = pygame.sprite.Group()
@@ -92,7 +92,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.current_Frame = 0
 		self.x = x
 		self.y = y
-		self.xVel = 0
+		self.xVel = .5
 		self.yVel = 0
 		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
 		self.image = pygame.image.load("Sprites/enemy collison.png")
@@ -126,11 +126,11 @@ class Enemy(pygame.sprite.Sprite):
 		
 	def update(self):
 		if ((self.current_Frame % 12) == 0):
-			#self.xVel = (float(randint(1,51))-25)/6
 			self.xVel = randint(1,11)-6
-		if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90)):
-			self.x = self.x + self.xVel
-			self.y = self.y + self.yVel
+		#self.dropDown(self.x ,self.y)
+		# if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90)):
+			# self.x = self.x + self.xVel
+			# self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
 		self.current_Frame = self.current_Frame + 1
 		if ((self.current_Frame % 60) == 0):
@@ -140,9 +140,19 @@ class Enemy(pygame.sprite.Sprite):
 		self.idle()
 
 	def shoot(self):
-		ran = randint(0,30)
+		ran = randint(0,((20-self.level)+10))
 		if ran == 1:
 			EnemyBullet(self, self.screen)
+			#self.dropDown(self.x, self.y)
+	
+	def dropDown(self, x, y):
+		xMove = 0
+		while xMove < 5:
+			#print self.x
+			self.x = self.x + self.xVel
+			xMove = self.x - x
+			self.y = y + (xMove ** 2)
+			
 		
 
 class Bullet(pygame.sprite.Sprite):

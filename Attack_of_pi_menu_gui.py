@@ -86,6 +86,7 @@ class Game(Frame):
                                         self.high_score(self.score)  
                                 if event.type == pygame.KEYDOWN:
                                         if event.key==pygame.K_SPACE:
+                                            if self.lives > -1:
                                                 Sprites.Bullet(self.player, screen)
                                         if event.key ==pygame.K_e:
                                                 Sprites.Enemy1(300, 50, screen)
@@ -94,6 +95,7 @@ class Game(Frame):
                         fstatus = Joystick.readChannel(0)
                         pygame.event.pump()									
                         if fstatus == "YES":
+                            if self.lives > -1:
                                 Sprites.Bullet(self.player, screen)
 
                         if mstatus == "Right":
@@ -200,7 +202,7 @@ HEIGHT = 550
 window = Tk()
 window.geometry("{}x{}".format(WIDTH,HEIGHT))
 window.title("Attack of The Pi !")
-menu = Game(window, score= 0, lives= 10, waves = 1)
+menu = Game(window, score= 0, lives= 5, waves = 1)
 window.mainloop()
 
 

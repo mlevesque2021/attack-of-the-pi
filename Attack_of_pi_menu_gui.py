@@ -39,6 +39,7 @@ class Game(Frame):
                 self.score = score
                 self.lives = lives
                 self.waves = waves
+                self.dead = False
 
         @property
         def score(self):
@@ -86,7 +87,7 @@ class Game(Frame):
                                         self.high_score(self.score)  
                                 if event.type == pygame.KEYDOWN:
                                         if event.key==pygame.K_SPACE:
-                                            if self.lives > -1:
+                                            if self.dead == False:
                                                 Sprites.Bullet(self.player, screen)
                                         if event.key ==pygame.K_e:
                                                 Sprites.Enemy1(300, 50, screen)
@@ -95,7 +96,7 @@ class Game(Frame):
                         fstatus = Joystick.readChannel(0)
                         pygame.event.pump()									
                         if fstatus == "YES":
-                            if self.lives > -1:
+                            if self.dead == False:
                                 Sprites.Bullet(self.player, screen)
 
                         if mstatus == "Right":
@@ -127,7 +128,6 @@ class Game(Frame):
                 global screen
                 screen = pygame.display.set_mode(background_size)
                 w,h = background_size
-
                 x = 0
                 y = 0
                 x1 = 0
@@ -162,6 +162,7 @@ class Game(Frame):
                             self.player = Sprites.Player(250,430, screen)
                             print "player died"
                         else:
+							self.dead = True
 							print "GAME OVER"
                     if y > h:
                         y = -h

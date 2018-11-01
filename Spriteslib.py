@@ -4,8 +4,7 @@ from pygame.locals import *
 from random import randint
 
 CENTER_HANDLE = 4
-pygame.init()
-FPS = 60
+#pygame.init()
 #define some groups
 bullets = pygame.sprite.Group()
 enemyBullets = pygame.sprite.Group()

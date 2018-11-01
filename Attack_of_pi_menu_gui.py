@@ -83,8 +83,10 @@ class Game(Frame):
 						for event in pygame.event.get():
 								if event.type == pygame.QUIT:
 										global running
+										global highscore
 										running = False
-										self.high_score(self.score)  
+										if (int(highscore) < self.score):
+											self.high_score(self.score)  
 								if event.type == pygame.KEYDOWN:
 										if event.key==pygame.K_SPACE:
 											if self.dead == False:

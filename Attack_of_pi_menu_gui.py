@@ -163,6 +163,7 @@ class Game():
 				Sprites.bullets.update()
 				Sprites.enemys.update()
 				Sprites.enemyBullets.update()
+				Sprites.GenLevel(self.screen, self.waves)
 				if Sprites.enemyDeath():
 					#happens when enemy dies
 					self.score = self.score + 5

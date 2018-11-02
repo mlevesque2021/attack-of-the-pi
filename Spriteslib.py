@@ -170,7 +170,6 @@ class Enemy(pygame.sprite.Sprite):
 			self.x = self.x + self.xVel
 			xMove = self.x - x
 			self.y = 0.02*(xMove ** 2) + y
-			print"{},{}".format(self.x, self.y)
 
 		
 

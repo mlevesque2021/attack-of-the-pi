@@ -163,7 +163,7 @@ class Enemy(pygame.sprite.Sprite):
 			self.lock = 1
 
 	def shoot(self):
-		ran = randint(0,((20-self.level)+10))
+		ran = randint(0,((200-self.level)+100))
 		if ran == 1:
 			self.ChannelD.play(self.bulletSound)
 			EnemyBullet(self, self.screen)

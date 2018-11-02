@@ -2,10 +2,13 @@ import random
 import pygame
 from pygame.locals import *
 from random import randint
+from pygame import mixer
 
 CENTER_HANDLE = 4
 pygame.init()
+mixer.init()
 #define some groups
+
 
 bullets = pygame.sprite.Group()
 enemyBullets = pygame.sprite.Group()
@@ -87,6 +90,8 @@ class Enemy(pygame.sprite.Sprite):
 
 	def __init__(self, x, y, screen, level):
 		pygame.sprite.Sprite.__init__(self)
+		self.ChannelD = pygame.mixer.Channel(3)
+		self.bulletSound = pygame.mixer.Sound("laser_widebeam.ogg") 
 		enemys.add(self)
 		self.screen = screen
 		self.level = level
@@ -158,6 +163,13 @@ class Enemy(pygame.sprite.Sprite):
 			self.lock = 1
 
 	def shoot(self):
+		ran = randint(0,((20-self.level)+10))
+		if ran == 1:
+			self.ChannelD.play(self.bulletSound)
+			EnemyBullet(self, self.screen)
+
+			#self.dropDown(self.x, self.y)
+	
 		ran = randint(0,((200-self.level)+100))
 		if ran == 5:
 			EnemyBullet(self, self.screen)

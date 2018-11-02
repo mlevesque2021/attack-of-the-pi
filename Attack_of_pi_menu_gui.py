@@ -186,19 +186,19 @@ class Game():
 			pygame.display.quit()
 			pygame.quit()
 	def score_counter(self, screen, score):
-			myfont = pygame.font.SysFont('Comic Sans MS', 20)
+			myfont = pygame.font.Font("ScifiAdventure.otf", 12)
 			textsurface = myfont.render("Score: {}".format(score), False, (255, 255, 255))
-			screen.blit(textsurface,(0,420))
+			screen.blit(textsurface,(0,0))
 
 	def life_counter(self, screen, lives):
-			myfont = pygame.font.SysFont('Comic Sans MS', 20)
+			myfont = pygame.font.Font("ScifiAdventure.otf", 12)
 			textsurface = myfont.render("Lives: {}".format(lives), False, (255, 255, 255))
-			screen.blit(textsurface,(700,420))
+			screen.blit(textsurface,(0,25))
 
 	def wave_counter(self, screen, wave):
-			myfont = pygame.font.SysFont('Comic Sans MS', 20)
+			myfont = pygame.font.Font("ScifiAdventure.otf", 12)
 			textsurface = myfont.render("Wave: {}".format(wave), False, (255, 255, 255))
-			screen.blit(textsurface,(0,390))
+			screen.blit(textsurface,(0,50))
 
 
 	def high_score(self, score):

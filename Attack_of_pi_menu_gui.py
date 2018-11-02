@@ -1,5 +1,6 @@
 from Tkinter import *
 import pygame
+from pygame import mixer
 from pygame.locals import *
 #import sys
 import pygame.sprite as sprite
@@ -43,6 +44,13 @@ class Menu(Frame):
 class Game():
 	def __init__(self, score, lives, waves):
 		pygame.init()
+		mixer.init()
+		self.laser = pygame.mixer.Sound("defaultLaser.ogg")
+		self.alienDestroyed = pygame.mixer.Sound("galaga_destroyed.ogg")
+		self.playerDestroyed = pygame.mixer.Sound("explosion.ogg")
+		self.ChannelA = pygame.mixer.Channel(0)
+		self.ChannelB = pygame.mixer.Channel(1)
+		self.ChannelC = pygame.mixer.Channel(2)
 		self.background = pygame.image.load('background_image.gif')
 		self.background_size = self.background.get_size()
 		self.background_rect = self.background.get_rect()
@@ -103,6 +111,7 @@ class Game():
 									if event.key==pygame.K_SPACE:
 										if self.dead == False:
 											Sprites.Bullet(self.player, self.screen)
+											self.ChannelA.play(self.laser)
 									if event.key ==pygame.K_e:
 											Sprites.Enemy1(300, 50, self.screen)
 			elif (Console == "PI"):
@@ -166,6 +175,7 @@ class Game():
 				if Sprites.enemyDeath():
 					#happens when enemy dies
 					self.score = self.score + 5
+					self.ChannelB.play(self.alienDestroyed)
 				if Sprites.playerDeath():
 					if self.lives > 0:
 						#happens when player dies but the game is not over
@@ -174,6 +184,7 @@ class Game():
 					else:
 						#happens when game is over
 						self.dead = True
+						self.ChannelC.play(self.playerDestroyed)
 						
 				if y > h:
 					y = -h

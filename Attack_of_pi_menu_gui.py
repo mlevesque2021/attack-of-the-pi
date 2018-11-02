@@ -30,12 +30,13 @@ class Menu(Frame):
 				self.button2.pack(side = TOP, fill = X)
 
 				self.img = PhotoImage(file = "space.gif")
-
+				self.highsc = Label(master, text = "HIGH SCORE : " + highscore, fg = "white", bg = "black", height = 1)
+				self.highsc.pack(side = BOTTOM, fill = X)                                
 				self.l = Label(master, image = self.img)
 				self.l.pack(side = BOTTOM, fill=X)
 	
 		def CreateGame(self):
-			Game(score= 0, lives= 5, waves = 1)
+			Game(score= 0, lives= 5, waves = 0)
 
 				
 
@@ -152,7 +153,10 @@ class Game():
 				self.screen.blit(self.background,(x1,y1))
 				self.score_counter(self.screen, self.score)
 				self.life_counter(self.screen, self.lives)
+				self.wave_counter(self.screen, self.waves)
 				self.events(Console)
+				if (len(Sprites.enemys) < 1):
+					self.waves += 1
 				Sprites.GenLevel(self.screen, self.waves)
 				self.events(Console)
 				Sprites.players.update()
@@ -183,16 +187,21 @@ class Game():
 			pygame.quit()
 	def score_counter(self, screen, score):
 			myfont = pygame.font.SysFont('Comic Sans MS', 20)
-			textsurface = myfont.render("Score = {}".format(score), False, (255, 255, 255))
+			textsurface = myfont.render("Score: {}".format(score), False, (255, 255, 255))
 			screen.blit(textsurface,(0,420))
 
 	def life_counter(self, screen, lives):
 			myfont = pygame.font.SysFont('Comic Sans MS', 20)
-			textsurface = myfont.render("Lives = {}".format(lives), False, (255, 255, 255))
+			textsurface = myfont.render("Lives: {}".format(lives), False, (255, 255, 255))
 			screen.blit(textsurface,(700,420))
-			
-	def high_score(self, score):
+
+	def wave_counter(self, screen, wave):
 			myfont = pygame.font.SysFont('Comic Sans MS', 20)
+			textsurface = myfont.render("Wave: {}".format(wave), False, (255, 255, 255))
+			screen.blit(textsurface,(0,390))
+
+
+	def high_score(self, score):
 			s = open("score.txt","w+")#this opens up the file 
 			s.write(str(score))
 			s.close()

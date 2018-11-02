@@ -163,7 +163,6 @@ class Enemy(pygame.sprite.Sprite):
 			self.lock = 1
 
 	def shoot(self):
-<<<<<<< HEAD
 		ran = randint(0,((20-self.level)+10))
 		if ran == 1:
 			self.ChannelD.play(self.bulletSound)
@@ -171,12 +170,10 @@ class Enemy(pygame.sprite.Sprite):
 
 			#self.dropDown(self.x, self.y)
 	
-=======
 		ran = randint(0,((200-self.level)+100))
 		if ran == 5:
 			EnemyBullet(self, self.screen)
 
->>>>>>> ed9e43c4b0f825323480f4c2967fef32fa73121f
 	def dropDown(self, x, y):
 		xMove = 0
 		self.xVel = 1

@@ -160,16 +160,16 @@ class Game():
 				Sprites.enemys.update()
 				Sprites.enemyBullets.update()
 				if Sprites.enemyDeath():
+					#happens when enemy dies
 					self.score = self.score + 5
-					print "enemy died"
 				if Sprites.playerDeath():
 					if self.lives > 0:
+						#happens when player dies but the game is not over
 						self.lives = self.lives - 1
 						self.player = Sprites.Player(250,430, self.screen)
-						print "player died"
 					else:
+						#happens when game is over
 						self.dead = True
-						print "GAME OVER"
 						
 				if y > h:
 					y = -h
@@ -178,6 +178,7 @@ class Game():
 				pygame.display.flip()
 				pygame.display.update()
 				theClock.tick(60)
+			Sprites.killAll()
 			pygame.display.quit()
 			pygame.quit()
 	def score_counter(self, screen, score):

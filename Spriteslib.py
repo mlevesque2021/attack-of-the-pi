@@ -6,6 +6,7 @@ from random import randint
 CENTER_HANDLE = 4
 pygame.init()
 #define some groups
+
 bullets = pygame.sprite.Group()
 enemyBullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
@@ -128,9 +129,9 @@ class Enemy(pygame.sprite.Sprite):
 		if ((self.current_Frame % 12) == 0):
 			self.xVel = randint(1,11)-6
 		#self.dropDown(self.x ,self.y)
-		# if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90)):
-			# self.x = self.x + self.xVel
-			# self.y = self.y + self.yVel
+		if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90)):
+			self.x = self.x + self.xVel
+			self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
 		self.current_Frame = self.current_Frame + 1
 		if ((self.current_Frame % 60) == 0):
@@ -257,5 +258,8 @@ def playerDeath():
 	else:
 		return False
 	
-		
-
+def killAll():
+	enemys.empty()
+	players.empty()
+	bullets.empty()
+	enemyBullets.empty()

@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
 
-	
+
 	def __init__(self, x, y, screen, level):
 		pygame.sprite.Sprite.__init__(self)
 		self.ChannelD = pygame.mixer.Channel(3)
@@ -97,46 +97,50 @@ class Enemy(pygame.sprite.Sprite):
 		self.level = level
 		self.current_Frame = 0
 		self.x = x
+		self.xStart = 0
 		self.y = y
-		self.xVel = .5
+		self.yStart = 0
+		self.xVel = 1
 		self.yVel = 0
 		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
 		self.image = pygame.image.load("Sprites/enemy collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
-		
+		self.moving = 0
+		self.lock = 1
+
 	@property
 	def xVel(self):
 		return self._xVel
-	
+
 	@xVel.setter
 	def xVel(self, value):
 		self._xVel = value
-		
+
 	@property
 	def yVel(self):
 		return self._yVel
-	
+
 	@yVel.setter
 	def yVel(self, value):
-		self._yVel = value	
-	
-		
+		self._yVel = value
+
+
 	def idle (self):
 		if ((self.current_Frame % 10) == 0 and self.index == 6):
 			self.index = 7
-			self.shoot()
 		elif ((self.current_Frame % 10) == 0 and self.index == 7):
 			self.index = 6
-		
+
 	def update(self):
 		if ((self.current_Frame % 12) == 0):
 			self.xVel = randint(1,11)-6
-		#self.dropDown(self.x ,self.y)
-		if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90)):
+
+		if (((self.x + self.xVel) < 700) and ((self.x + self.xVel) > 90) and self.lock == 1):
 			self.x = self.x + self.xVel
 			self.y = self.y + self.yVel
+
 		self.rect.center = ((self.x,self.y))
 		self.current_Frame = self.current_Frame + 1
 		if ((self.current_Frame % 60) == 0):
@@ -144,8 +148,22 @@ class Enemy(pygame.sprite.Sprite):
 
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.idle()
+		self.shoot()
+		ran = randint(0,((20-self.level)+1000))
+		if (ran == 7 and self.lock == 1):
+			self.xStart = self.x
+			self.yStart = self.y
+			self.dropDown(self.xStart,self.yStart)
+			self.lock = 0
+		elif (self.lock == 0 and self.moving < 100):
+			self.dropDown(self.xStart,self.yStart)
+			self.moving = self.moving + 1
+		else:
+			self.moving = 0
+			self.lock = 1
 
 	def shoot(self):
+<<<<<<< HEAD
 		ran = randint(0,((20-self.level)+10))
 		if ran == 1:
 			self.ChannelD.play(self.bulletSound)
@@ -153,14 +171,22 @@ class Enemy(pygame.sprite.Sprite):
 
 			#self.dropDown(self.x, self.y)
 	
+=======
+		ran = randint(0,((200-self.level)+100))
+		if ran == 5:
+			EnemyBullet(self, self.screen)
+
+>>>>>>> ed9e43c4b0f825323480f4c2967fef32fa73121f
 	def dropDown(self, x, y):
 		xMove = 0
-		while xMove < 5:
+		self.xVel = 1
+		if self.y < 350:
 			#print self.x
 			self.x = self.x + self.xVel
 			xMove = self.x - x
-			self.y = y + (xMove ** 2)
-			
+			self.y = 0.02*(xMove ** 2) + y
+			print"{},{}".format(self.x, self.y)
+
 		
 
 class Bullet(pygame.sprite.Sprite):

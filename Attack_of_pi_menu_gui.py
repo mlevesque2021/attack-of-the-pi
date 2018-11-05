@@ -167,6 +167,7 @@ class Game():
 				Sprites.bullets.update()
 				Sprites.enemys.update()
 				Sprites.enemyBullets.update()
+				Sprites.beams.update()
 				self.side_panel(self.screen)
 				self.score_counter(self.screen, self.score)
 				self.life_counter(self.screen, self.lives)
@@ -201,6 +202,7 @@ class Game():
 			Sprites.killAll()
 			pygame.display.quit()
 			pygame.quit()
+
 	def side_panel(self, screen):
 		panel = pygame.Surface((150, 600))
 		panel.fill((77, 90, 142))

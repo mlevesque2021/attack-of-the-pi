@@ -168,6 +168,7 @@ class Game():
 				Sprites.enemys.update()
 				Sprites.enemyBullets.update()
 				Sprites.beams.update()
+				Sprites.ships.update()
 				self.side_panel(self.screen)
 				self.score_counter(self.screen, self.score)
 				self.life_counter(self.screen, self.lives)

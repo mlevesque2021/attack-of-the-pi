@@ -15,6 +15,7 @@ enemyBullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
 players = pygame.sprite.Group()
 beams = pygame.sprite.Group()
+ships = pygame.sprite.Group()
 xPos = [x * 48 for x in range(2,20)]
 yPos = [y * 20 for y in range (1,5)]
 
@@ -56,18 +57,32 @@ class Player(pygame.sprite.Sprite):
 		self.y = y
 		self.xVel = 0
 		self.yVel = 0
+		self.linked = None
+		self.isLinked = 0
 		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
 		self.image = pygame.image.load("Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		
 		self.index = 7
+	def linkPlayer(self):
+		self.linked = Player2(self)
+		self.isLinked = True
+
+	def shoot(self):
+		Bullet(self, self.screen)
+		if self.isLinked == True:
+			print 'second shot'
+			Bullet(self.linked, self.screen)
 		
 	def update(self):
 		if (self.x > 800):
 			self.x = 150
 		elif (self.x < 150):
 			self.x = 800
+		if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
+			Captured(self.screen, self)
+			self.kill()
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
@@ -79,7 +94,7 @@ class Player(pygame.sprite.Sprite):
 	
 	@xVel.setter
 	def xVel(self, value):
-		self._xVel = value
+		self._xVel = value 
 		
 	@property
 	def yVel(self):
@@ -89,6 +104,30 @@ class Player(pygame.sprite.Sprite):
 	def yVel(self, value):
 		self._yVel = value
 
+class Player2(pygame.sprite.Sprite):
+
+	def __init__(self, player):
+		pygame.sprite.Sprite.__init__(self)
+		players.add(self)
+		self.x = player.x +15
+		self.y = player.y
+		self.player = player
+		self.screen = player.screen
+		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("Sprites/player collison.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
+		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("Sprites/player collison.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
+		self.index = 7
+
+	def update(self):
+		self.x = self.player.x + 15
+		self.y = self.player.y
+		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
+		
 class Enemy(pygame.sprite.Sprite):
 
 
@@ -236,15 +275,53 @@ class Enemy3(Enemy):
 		
 class Enemy4(Enemy):
 	def __init__(self, x, y, screen, level):
-		Enemy.__init__(self, x, y, screen, level)
+		Enemy.__init__(self, x, y, screen, level)		
 		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
 		self.image = pygame.image.load("Sprites/collison2.png")		
+	
+class Captured(pygame.sprite.Sprite):
+	def __init__(self, screen, player):
+		pygame.sprite.Sprite.__init__(self)
+		ships.add(self)
+		self.x = player.x
+		self.y = player.y
+		self.xVel = 0
+		self.yVel = 0
+		self.current_Frame = 0
+		self.screen = screen
+		self.spritesheet = spritesheet("Sprites/Captured.png",8,1)
+		self.image = pygame.image.load("Sprites/player collison.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
+		self.index = 7
+		
+	def update(self):
+		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
+		if self.y > 20 :
+			self.yVel = -3
+		else:
+			self.yVel = 0
+			if ((self.current_Frame % 12) == 0):
+				self.xVel = randint(1,11)-6
+
+		if (self.x > 800):
+			self.x = 150
+		elif (self.x < 150):
+			self.x = 800
+		self.current_Frame = self.current_Frame + 1
+		if self.current_Frame % 60 == 0:
+			self.current_Frame = 0
+		pygame.sprite.groupcollide(ships, bullets, True, True, pygame.sprite.collide_mask)
+		self.rect.center = ((self.x,self.y))
+		self.x = self.x + self.xVel
+		self.y = self.y + self.yVel
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, player, screen):
 		pygame.sprite.Sprite.__init__(self)
 		bullets.add(self)
 		self.screen = screen
+		self.player = player
 		self.x = player.x
 		self.y = player.y + 10
 		self.xVel = 0
@@ -261,7 +338,10 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
-		#pygame.sprite.spritecollide(self, enemys, True, pygame.sprite.collide_mask)
+		if pygame.sprite.spritecollideany(self, ships, pygame.sprite.collide_mask):
+			self.kill()
+			self.player.linkPlayer()
+			
 		if self.y < -20:
 			bullets.remove(self)
 
@@ -299,12 +379,10 @@ class Beam(pygame.sprite.Sprite):
 		self.y = enemy.y + 50
 		self.current_Frame = 0
 		self.spritesheet = spritesheet("Sprites/beam.png",3,1)
-		# make collison image
-		self.image = pygame.image.load("Sprites/bullet.png")
+		self.image = pygame.image.load("Sprites/beam collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 1
-		print len(beams)
 	
 	def killBeam(self):
 		beams.remove(self)
@@ -312,6 +390,7 @@ class Beam(pygame.sprite.Sprite):
 	def update(self):
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.current_Frame = self.current_Frame + 1
+		self.rect.center = ((self.x,self.y))
 		if self.current_Frame % 60 == 0:
 			self.current_Frame = 0
 		if self.current_Frame % 20 == 0 :
@@ -341,9 +420,11 @@ def enemyDeath():
 		return True
 	else:
 		return False
-		
+	
 def playerDeath():
 	if pygame.sprite.groupcollide(enemyBullets, players, True, pygame.sprite.collide_mask):
+		return True
+	elif pygame.sprite.groupcollide(beams, players, False, False, pygame.sprite.collide_mask):
 		return True
 	else:
 		return False
@@ -352,4 +433,6 @@ def killAll():
 	enemys.empty()
 	players.empty()
 	bullets.empty()
+	beams.empty()
 	enemyBullets.empty()
+	ships.empty()

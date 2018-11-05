@@ -93,13 +93,16 @@ class Game():
 
 					if keys[K_RIGHT]:
 							self.player.xVel = 5
+
 							
 					elif keys[K_LEFT]:
 							self.player.xVel = -5
 
+
 					else:
 							self.player.xVel = 0
 							self.player.yVel = 0
+
 
 					for event in pygame.event.get():
 							if event.type == pygame.QUIT:
@@ -150,7 +153,7 @@ class Game():
 			x1 = 0
 			y1 = -h
 			#Sprites.init()
-			self.player = Sprites.Player(250,430, self.screen)
+			self.player = Sprites.Player(265,430, self.screen)
 			global Console
 			self.running = True
 			while self.running:

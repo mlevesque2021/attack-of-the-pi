@@ -166,6 +166,26 @@ class Enemy(pygame.sprite.Sprite):
 			self.ChannelD.play(self.bulletSound)
 			EnemyBullet(self, self.screen)
 
+	def mayDrop(self):
+		ran = randint(0,((20-self.level)+2000))
+		if (ran == 7 and self.lock == 1):
+			self.xStart = self.x
+			self.yStart = self.y
+			self.time = 0
+			if self.x < 600:
+				self.dropDown(self.xStart, self.yStart)
+				self.lock = 0
+
+		elif (self.lock == 0 and self.time < 3):
+			self.dropDown(self.xStart, self.yStart)
+			
+		elif self.time == 3 and self.current_Frame == 1 and self.lock == 0:
+
+			self.beam = Beam(self, self.screen)
+	
+		elif self.time > 5 and self.lock == 0:
+			self.beam.killBeam()
+			self.goUp(self.xStart, self.yStart)
 
 	def dropDown(self, x, y):
 		xMove = 0
@@ -175,13 +195,16 @@ class Enemy(pygame.sprite.Sprite):
 			self.x = self.x + self.xVel
 			xMove = self.x - x
 			self.y = 0.02*(xMove ** 2) + y
-
-	def beam(self):
-		#y = mx +b
-		#m = ((float(yStart) - self.y)/(self.xStart-self.y))
-		#self.y = (m*self.x)+self.y 
-		pass
-		
+			
+	def goUp(self, x, y):
+		xMove = 0
+		self.xVel = -1
+		if self.x > x:
+			self.x = self.x + self.xVel
+			xMove = self.x - x
+			self.y = 0.02*(xMove ** 2) + y
+		else:
+			self.lock = 1
 
 class Enemy1(Enemy):
 	def __init__(self, x, y, screen, level):
@@ -190,26 +213,9 @@ class Enemy1(Enemy):
 
 	def update(self):
 		Enemy.update(self)
-		ran = randint(0,((20-self.level)+2000))
+		self.mayDrop()
+		
 
-		if (ran == 7 and self.lock == 1):
-			self.xStart = self.x
-			self.yStart = self.y
-			self.time = 0
-			if self.x < 600:
-				self.dropDown(self.xStart, self.yStart)
-				self.lock = 0
-
-		elif (self.lock == 0 and self.time < 3 and self.lock == 0):
-			self.dropDown(self.xStart, self.yStart)
-			
-		if self.time == 3 and self.current_Frame == 1 and self.lock == 0:
-
-			self.beam = Beam(self, self.screen)
-	
-		elif self.time > 5 and self.lock == 0:
-			self.beam.killBeam()
-			self.lock = 1
 
 class Enemy2(Enemy):
 	def __init__(self, x, y, screen, level):
@@ -225,26 +231,7 @@ class Enemy3(Enemy):
 
 	def update(self):
 		Enemy.update(self)
-		ran = randint(0,((20-self.level)+2000))
-
-		if (ran == 7 and self.lock == 1):
-			self.xStart = self.x
-			self.yStart = self.y
-			self.time = 0
-			if self.x < 600:
-				self.dropDown(self.xStart, self.yStart)
-				self.lock = 0
-
-		elif (self.lock == 0 and self.time < 3 and self.lock == 0):
-			self.dropDown(self.xStart, self.yStart)
-			
-		if self.time == 3 and self.current_Frame == 1 and self.lock == 0:
-
-			self.beam = Beam(self, self.screen)
-	
-		elif self.time > 5 and self.lock == 0:
-			self.beam.killBeam()
-			self.lock = 1
+		self.mayDrop()
 
 		
 class Enemy4(Enemy):

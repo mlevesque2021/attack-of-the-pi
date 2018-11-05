@@ -63,9 +63,12 @@ class Player(pygame.sprite.Sprite):
 		self.index = 7
 		
 	def update(self):
-		if (((self.x + self.xVel) > 90) and ((self.x + self.xVel) < 790)):
-			self.x = self.x + self.xVel
-			self.y = self.y + self.yVel
+		if (self.x > 800):
+			self.x = 150
+		elif (self.x < 150):
+			self.x = 800
+		self.x = self.x + self.xVel
+		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		
@@ -137,12 +140,13 @@ class Enemy(pygame.sprite.Sprite):
 		if ((self.current_Frame % 12) == 0):
 			self.xVel = randint(1,11)-6
 
-		if (self.x % 800 == 0):
-			self.x = 100
-		elif (self.x % 100 == 0):
-			self.x = 750
-		self.x = self.x + self.xVel
-		self.y = self.y + self.yVel
+		if (self.x > 800):
+			self.x = 150
+		elif (self.x < 150):
+			self.x = 800
+		if self.lock == 1:
+			self.x = self.x + self.xVel
+			self.y = self.y + self.yVel
 
 		self.rect.center = ((self.x,self.y))
 		self.current_Frame = self.current_Frame + 1

@@ -163,6 +163,11 @@ class Game():
 				y += 5
 				self.screen.blit(self.background,(x,y))
 				self.screen.blit(self.background,(x1,y1))
+				Sprites.players.update()
+				Sprites.bullets.update()
+				Sprites.enemys.update()
+				Sprites.enemyBullets.update()
+				self.side_panel(self.screen)
 				self.score_counter(self.screen, self.score)
 				self.life_counter(self.screen, self.lives)
 				self.wave_counter(self.screen, self.waves)
@@ -171,10 +176,6 @@ class Game():
 					self.waves += 1
 				Sprites.GenLevel(self.screen, self.waves)
 				self.events(Console)
-				Sprites.players.update()
-				Sprites.bullets.update()
-				Sprites.enemys.update()
-				Sprites.enemyBullets.update()
 				Sprites.GenLevel(self.screen, self.waves)
 				if Sprites.enemyDeath():
 					#happens when enemy dies
@@ -200,6 +201,11 @@ class Game():
 			Sprites.killAll()
 			pygame.display.quit()
 			pygame.quit()
+	def side_panel(self, screen):
+		panel = pygame.Surface((150, 600))
+		panel.fill((77, 90, 142))
+		screen.blit(panel,(0,0))
+
 	def score_counter(self, screen, score):
 			myfont = pygame.font.Font("ScifiAdventure.otf", 12)
 			textsurface = myfont.render("Score: {}".format(score), False, (255, 255, 255))

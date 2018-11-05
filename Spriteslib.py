@@ -96,6 +96,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.screen = screen
 		self.level = level
 		self.current_Frame = 0
+		self.time = 0
 		self.x = x
 		self.xStart = 0
 		self.y = y
@@ -107,7 +108,6 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
-		self.moving = 0
 		self.lock = 1
 
 	@property
@@ -145,21 +145,25 @@ class Enemy(pygame.sprite.Sprite):
 		self.current_Frame = self.current_Frame + 1
 		if ((self.current_Frame % 60) == 0):
 			self.current_Frame = 0
+			self.time = self.time + 1
 
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.idle()
 		self.shoot()
-		ran = randint(0,((20-self.level)+1000))
+		ran = randint(0,((20-self.level)+2000))
 		if (ran == 7 and self.lock == 1):
 			self.xStart = self.x
 			self.yStart = self.y
-			self.dropDown(self.xStart,self.yStart)
-			self.lock = 0
-		elif (self.lock == 0 and self.moving < 100):
-			self.dropDown(self.xStart,self.yStart)
-			self.moving = self.moving + 1
-		else:
-			self.moving = 0
+			self.time = 0
+			if self.x < 600:
+				self.dropDown(self.xStart, self.yStart)
+				self.lock = 0
+
+		elif (self.lock == 0 and self.time < 3):
+			self.dropDown(self.xStart, self.yStart)
+			
+		elif self.time > 3 and self.time < 5:
+			self.beam()
 			self.lock = 1
 
 	def shoot(self):
@@ -168,11 +172,6 @@ class Enemy(pygame.sprite.Sprite):
 			self.ChannelD.play(self.bulletSound)
 			EnemyBullet(self, self.screen)
 
-			#self.dropDown(self.x, self.y)
-	
-		ran = randint(0,((200-self.level)+100))
-		if ran == 5:
-			EnemyBullet(self, self.screen)
 
 	def dropDown(self, x, y):
 		xMove = 0
@@ -183,6 +182,11 @@ class Enemy(pygame.sprite.Sprite):
 			xMove = self.x - x
 			self.y = 0.02*(xMove ** 2) + y
 
+	def beam(self):
+		#y = mx +b
+		#m = ((float(yStart) - self.y)/(self.xStart-self.y))
+		#self.y = (m*self.x)+self.y 
+		pass
 		
 
 class Bullet(pygame.sprite.Sprite):

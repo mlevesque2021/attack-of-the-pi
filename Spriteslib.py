@@ -18,7 +18,7 @@ beams = pygame.sprite.Group()
 ships = pygame.sprite.Group()
 xPos = [x * 48 for x in range(2,20)]
 yPos = [y * 20 for y in range (1,5)]
-
+dropLock = 0
 
 
 class spritesheet:
@@ -70,6 +70,8 @@ class Player(pygame.sprite.Sprite):
 	def linkPlayer(self):
 		self.linked = Player2(self)
 		self.isLinked = True
+		global dropLock
+		dropLock = 1
 
 	def shoot(self):
 		Bullet(self, self.screen)
@@ -81,13 +83,22 @@ class Player(pygame.sprite.Sprite):
 			self.x = 150
 		elif (self.x < 150):
 			self.x = 800
-		if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
-			Captured(self.screen, self)
-			self.ChannelF.play(self.fighter_captured)
-			pygame.sprite.groupcollide(beams, players, True, False, pygame.sprite.collide_mask)
-			self.kill()
-		if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
-			self.kill()
+		if self.isLinked == False:
+			if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
+				Captured(self.screen, self)
+				self.ChannelF.play(self.fighter_captured)
+				pygame.sprite.groupcollide(beams, players, True, False, pygame.sprite.collide_mask)
+				self.kill()
+			if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
+				self.kill()
+		else:
+			if pygame.sprite.groupcollide(players, enemyBullets,False, True, pygame.sprite.collide_mask):
+				global dropLock
+				dropLock = 0
+				self.linked.kill()
+				self.linked = None
+				self.isLinked = False
+			
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
@@ -211,8 +222,9 @@ class Enemy(pygame.sprite.Sprite):
 			EnemyBullet(self, self.screen)
 
 	def mayDrop(self):
+		global dropLock
 		ran = randint(0,((20-self.level)+2000))
-		if (ran == 7 and self.lock == 1):
+		if (ran == 7 and self.lock == 1 and dropLock == 0):
 			self.xStart = self.x
 			self.yStart = self.y
 			self.time = 0

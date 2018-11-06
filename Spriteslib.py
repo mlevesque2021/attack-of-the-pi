@@ -223,7 +223,7 @@ class Enemy(pygame.sprite.Sprite):
 			self.beam = Beam(self, self.screen)
 			
 		elif self.time == 3 and self.current_Frame == 1 and self.lock == 0:
-
+			pass
 	
 		elif self.time > 5 and self.lock == 0:
 			#self.beam.killBeam()

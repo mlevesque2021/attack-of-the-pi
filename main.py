@@ -9,13 +9,11 @@ import shelve
 #import joystickLibv2 as Joystick
 Console = "PC"
 
-
 def read_high_score():
 		s = open("score.txt", "r")
 		if (s.mode == 'r'):
 				data = s.read()
 		return data
-
 
 highscore = read_high_score()
 

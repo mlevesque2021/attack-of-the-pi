@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
 			self.x = 150
 		elif (self.x < 150):
 			self.x = 800
-		if pygame.sprite.groupcollide(players, beams, False, True, pygame.sprite.collide_mask):
+		if pygame.sprite.groupcollide(players, beams, True, True, pygame.sprite.collide_mask):
 			Captured(self.screen, self)
 			self.ChannelF.play(self.fighter_captured)
 		if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
@@ -220,13 +220,13 @@ class Enemy(pygame.sprite.Sprite):
 
 		elif (self.lock == 0 and self.time < 3):
 			self.dropDown(self.xStart, self.yStart)
-			self.beam = Beam(self, self.screen)
 			
 		elif self.time == 3 and self.current_Frame == 1 and self.lock == 0:
-			pass
+
+			self.beam = Beam(self, self.screen)
 	
 		elif self.time > 5 and self.lock == 0:
-			#self.beam.killBeam()
+			self.beam.killBeam()
 			self.goUp(self.xStart, self.yStart)
 
 	def dropDown(self, x, y):

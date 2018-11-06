@@ -61,6 +61,7 @@ class Player(pygame.sprite.Sprite):
 		self.yVel = 0
 		self.linked = None
 		self.isLinked = False
+		self.isLinked = 0
 		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
 		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
@@ -74,6 +75,11 @@ class Player(pygame.sprite.Sprite):
 	def shoot(self):
 		Bullet(self, self.screen)
 		if self.isLinked == True:
+			self.isLinked = 1
+
+	def shoot(self):
+		Bullet(self, self.screen)
+		if self.isLinked == 1:
 			Bullet(self.linked, self.screen)
 		
 	def update(self):
@@ -117,6 +123,10 @@ class Player2(pygame.sprite.Sprite):
 		self.y = player.y
 		self.player = player
 		self.screen = player.screen
+		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/player collison.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
 		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
 		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
@@ -295,6 +305,39 @@ class Captured(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
 		
+		
+class Enemy3(Enemy):
+	def __init__(self, x, y, screen, level):
+		Enemy.__init__(self, x, y, screen, level)
+		self.spritesheet = spritesheet("resources/Sprites/enemy3.png",8,1)
+
+	def update(self):
+		Enemy.update(self)
+		self.mayDrop()
+
+		
+class Enemy4(Enemy):
+	def __init__(self, x, y, screen, level):
+		Enemy.__init__(self, x, y, screen, level)		
+		self.spritesheet = spritesheet("resources/Sprites/enemy4.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/collison2.png")		
+	
+class Captured(pygame.sprite.Sprite):
+	def __init__(self, screen, player):
+		pygame.sprite.Sprite.__init__(self)
+		ships.add(self)
+		self.x = player.x
+		self.y = player.y
+		self.xVel = 0
+		self.yVel = 0
+		self.current_Frame = 0
+		self.screen = screen
+		self.spritesheet = spritesheet("resources/Sprites/Captured.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/player collison.png")
+		self.rect = self.image.get_rect()
+		self.mask = pygame.mask.from_surface(self.image)
+		self.index = 7
+		
 	def update(self):
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		if self.y > 20 :
@@ -316,6 +359,8 @@ class Captured(pygame.sprite.Sprite):
 		self.y = self.y + self.yVel
 		#if pygame.sprite.spritecollideany(self, bullets, pygame.sprite.collide_mask):
 			#self.kill()
+		if pygame.sprite.spritecollideany(self, bullets, pygame.sprite.collide_mask):
+			self.kill()
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, player, screen):
@@ -342,6 +387,8 @@ class Bullet(pygame.sprite.Sprite):
 		if pygame.sprite.groupcollide(bullets, ships, True, True, pygame.sprite.collide_mask):
 			#self.kill()
 			print 'new ship'
+		if pygame.sprite.spritecollideany(self, ships, pygame.sprite.collide_mask):
+			self.kill()
 			self.player.linkPlayer()
 			
 		if self.y < -20:
@@ -368,6 +415,7 @@ class EnemyBullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
+		#pygame.sprite.spritecollide(self, players, True, pygame.sprite.collide_mask)
 		if self.y > 500:
 			bullets.remove(self)
 

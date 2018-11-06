@@ -121,13 +121,10 @@ class Player2(pygame.sprite.Sprite):
 		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
-<<<<<<< HEAD
 		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
 		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
-=======
->>>>>>> cc794846d113c8b24da5716f928624f31d9dee47
 		self.index = 7
 
 	def update(self):
@@ -433,14 +430,11 @@ def enemyDeath():
 		return False
 	
 def playerDeath():
-<<<<<<< HEAD
 	if pygame.sprite.groupcollide(enemyBullets, players, True, pygame.sprite.collide_mask):
 		playerDied = pygame.mixer.Sound("resources/Sounds/fighter_destroyed.ogg")
 		ChannelG = pygame.mixer.Channel(6)
 		ChannelG.play(playerDied)
-=======
 	if pygame.sprite.groupcollide(enemyBullets, players, False, False, pygame.sprite.collide_mask):
->>>>>>> cc794846d113c8b24da5716f928624f31d9dee47
 		return True
 	elif pygame.sprite.groupcollide(beams, players, False, False, pygame.sprite.collide_mask):
 		return True

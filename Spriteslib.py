@@ -81,9 +81,11 @@ class Player(pygame.sprite.Sprite):
 			self.x = 150
 		elif (self.x < 150):
 			self.x = 800
-		if pygame.sprite.groupcollide(players, beams, True, True, pygame.sprite.collide_mask):
+		if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
 			Captured(self.screen, self)
 			self.ChannelF.play(self.fighter_captured)
+			pygame.sprite.groupcollide(beams, players, True, False, pygame.sprite.collide_mask)
+			self.kill()
 		if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
 			self.kill()
 		self.x = self.x + self.xVel

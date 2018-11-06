@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
 			self.x = 150
 		elif (self.x < 150):
 			self.x = 800
-		if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
+		if pygame.sprite.groupcollide(players, beams, False, True, pygame.sprite.collide_mask):
 			Captured(self.screen, self)
 			self.ChannelF.play(self.fighter_captured)
 			self.kill()
@@ -257,15 +257,12 @@ class Enemy1(Enemy):
 	def update(self):
 		Enemy.update(self)
 		self.mayDrop()
-		
-
 
 class Enemy2(Enemy):
 	def __init__(self, x, y, screen, level):
 		Enemy.__init__(self, x, y, screen, level)
 		self.spritesheet = spritesheet("resources/Sprites/enemy2.png",8,1)
 		self.image = pygame.image.load("resources/Sprites/collison2.png")
-		
 		
 class Enemy3(Enemy):
 	def __init__(self, x, y, screen, level):
@@ -276,7 +273,6 @@ class Enemy3(Enemy):
 		Enemy.update(self)
 		self.mayDrop()
 
-		
 class Enemy4(Enemy):
 	def __init__(self, x, y, screen, level):
 		Enemy.__init__(self, x, y, screen, level)		
@@ -318,8 +314,6 @@ class Captured(pygame.sprite.Sprite):
 		self.rect.center = ((self.x,self.y))
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
-		if pygame.sprite.spritecollideany(self, bullets, pygame.sprite.collide_mask):
-			self.kill()
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, player, screen):

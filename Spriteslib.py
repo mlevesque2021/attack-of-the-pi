@@ -311,8 +311,8 @@ class Captured(pygame.sprite.Sprite):
 		self.rect.center = ((self.x,self.y))
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
-		if pygame.sprite.spritecollideany(self, bullets, pygame.sprite.collide_mask):
-			self.kill()
+		#if pygame.sprite.spritecollideany(self, bullets, pygame.sprite.collide_mask):
+			#self.kill()
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, player, screen):
@@ -336,8 +336,9 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
-		if pygame.sprite.spritecollideany(self, ships, pygame.sprite.collide_mask):
-			self.kill()
+		if pygame.sprite.groupcollide(bullets, ships, True, True, pygame.sprite.collide_mask):
+			#self.kill()
+			print 'new ship'
 			self.player.linkPlayer()
 			
 		if self.y < -20:
@@ -364,7 +365,6 @@ class EnemyBullet(pygame.sprite.Sprite):
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
-		#pygame.sprite.spritecollide(self, players, True, pygame.sprite.collide_mask)
 		if self.y > 500:
 			bullets.remove(self)
 

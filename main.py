@@ -6,6 +6,7 @@ from pygame.locals import *
 import pygame.sprite as sprite
 import Spriteslib as Sprites
 import shelve
+from time import sleep
 #import joystickLibv2 as Joystick
 Console = "PC"
 
@@ -175,6 +176,11 @@ class Game():
 				self.events(Console)
 				if (len(Sprites.enemys) < 1):
 					self.waves += 1
+					myfont = pygame.font.Font("resources/Fonts/ScifiAdventure.otf", 24)
+					textsurface = myfont.render("WAVE {}".format(self.waves), False, (255, 255, 255))
+					self.screen.blit(textsurface,(395,215))
+					pygame.display.update()
+					sleep(2)
 				Sprites.GenLevel(self.screen, self.waves)
 				self.events(Console)
 				Sprites.GenLevel(self.screen, self.waves)

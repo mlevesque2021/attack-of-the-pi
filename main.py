@@ -111,7 +111,7 @@ class Game():
 							if event.type == pygame.KEYDOWN:
 									if event.key==pygame.K_SPACE:
 										if self.dead == False:
-											Sprites.Bullet(self.player, self.screen)
+											self.player.shoot()
 											self.ChannelA.play(self.laser)
 									if event.key ==pygame.K_e:
 											Sprites.Enemy1(300, 50, self.screen)

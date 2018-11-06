@@ -52,6 +52,8 @@ class Player(pygame.sprite.Sprite):
 	def __init__(self, x, y, screen):
 		pygame.sprite.Sprite.__init__(self)
 		players.add(self)
+		self.ChannelF = pygame.mixer.Channel(5)
+		self.fighter_captured = pygame.mixer.Sound("resources/Sounds/fighter_captured.ogg")
 		self.screen = screen
 		self.x = x
 		self.y = y
@@ -59,8 +61,8 @@ class Player(pygame.sprite.Sprite):
 		self.yVel = 0
 		self.linked = None
 		self.isLinked = 0
-		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
-		self.image = pygame.image.load("Sprites/player collison.png")
+		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		
@@ -82,6 +84,7 @@ class Player(pygame.sprite.Sprite):
 			self.x = 800
 		if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
 			Captured(self.screen, self)
+			self.ChannelF.play(self.fighter_captured)
 			self.kill()
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
@@ -113,12 +116,12 @@ class Player2(pygame.sprite.Sprite):
 		self.y = player.y
 		self.player = player
 		self.screen = player.screen
-		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
-		self.image = pygame.image.load("Sprites/player collison.png")
+		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
-		self.spritesheet = spritesheet("Sprites/player_Spritesheet.png",8,1)
-		self.image = pygame.image.load("Sprites/player collison.png")
+		self.spritesheet = spritesheet("resources/Sprites/player_Spritesheet.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
@@ -134,7 +137,7 @@ class Enemy(pygame.sprite.Sprite):
 	def __init__(self, x, y, screen, level):
 		pygame.sprite.Sprite.__init__(self)
 		self.ChannelD = pygame.mixer.Channel(3)
-		self.bulletSound = pygame.mixer.Sound("laser_widebeam.ogg") 
+		self.bulletSound = pygame.mixer.Sound("resources/Sounds/laser_widebeam.ogg") 
 		enemys.add(self)
 		self.screen = screen
 		self.level = level
@@ -146,8 +149,8 @@ class Enemy(pygame.sprite.Sprite):
 		self.yStart = 0
 		self.xVel = 1
 		self.yVel = 0
-		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
-		self.image = pygame.image.load("Sprites/enemy collison.png")
+		self.spritesheet = spritesheet("resources/Sprites/enemy3.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/enemy collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
@@ -248,7 +251,7 @@ class Enemy(pygame.sprite.Sprite):
 class Enemy1(Enemy):
 	def __init__(self, x, y, screen, level):
 		Enemy.__init__(self, x, y, screen, level)
-		self.spritesheet = spritesheet("Sprites/enemy1.png",8,1)
+		self.spritesheet = spritesheet("resources/Sprites/enemy1.png",8,1)
 
 	def update(self):
 		Enemy.update(self)
@@ -259,14 +262,14 @@ class Enemy1(Enemy):
 class Enemy2(Enemy):
 	def __init__(self, x, y, screen, level):
 		Enemy.__init__(self, x, y, screen, level)
-		self.spritesheet = spritesheet("Sprites/enemy2.png",8,1)
-		self.image = pygame.image.load("Sprites/collison2.png")
+		self.spritesheet = spritesheet("resources/Sprites/enemy2.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/collison2.png")
 		
 		
 class Enemy3(Enemy):
 	def __init__(self, x, y, screen, level):
 		Enemy.__init__(self, x, y, screen, level)
-		self.spritesheet = spritesheet("Sprites/enemy3.png",8,1)
+		self.spritesheet = spritesheet("resources/Sprites/enemy3.png",8,1)
 
 	def update(self):
 		Enemy.update(self)
@@ -276,8 +279,8 @@ class Enemy3(Enemy):
 class Enemy4(Enemy):
 	def __init__(self, x, y, screen, level):
 		Enemy.__init__(self, x, y, screen, level)		
-		self.spritesheet = spritesheet("Sprites/enemy4.png",8,1)
-		self.image = pygame.image.load("Sprites/collison2.png")		
+		self.spritesheet = spritesheet("resources/Sprites/enemy4.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/collison2.png")		
 	
 class Captured(pygame.sprite.Sprite):
 	def __init__(self, screen, player):
@@ -289,8 +292,8 @@ class Captured(pygame.sprite.Sprite):
 		self.yVel = 0
 		self.current_Frame = 0
 		self.screen = screen
-		self.spritesheet = spritesheet("Sprites/Captured.png",8,1)
-		self.image = pygame.image.load("Sprites/player collison.png")
+		self.spritesheet = spritesheet("resources/Sprites/Captured.png",8,1)
+		self.image = pygame.image.load("resources/Sprites/player collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
@@ -326,8 +329,8 @@ class Bullet(pygame.sprite.Sprite):
 		self.y = player.y + 10
 		self.xVel = 0
 		self.yVel = -5
-		self.spritesheet = spritesheet("Sprites/bullet.png",1,1)
-		self.image = pygame.image.load("Sprites/bullet.png")
+		self.spritesheet = spritesheet("resources/Sprites/bullet.png",1,1)
+		self.image = pygame.image.load("resources/Sprites/bullet.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 1
@@ -355,8 +358,8 @@ class EnemyBullet(pygame.sprite.Sprite):
 		self.y = enemy.y - 10
 		self.xVel = 0
 		self.yVel = 5
-		self.spritesheet = spritesheet("Sprites/EnemyBullet.png",1,1)
-		self.image = pygame.image.load("Sprites/bullet.png")
+		self.spritesheet = spritesheet("resources/Sprites/EnemyBullet.png",1,1)
+		self.image = pygame.image.load("resources/Sprites/bullet.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 1
@@ -374,12 +377,14 @@ class Beam(pygame.sprite.Sprite):
 	def __init__(self, enemy, screen):
 		pygame.sprite.Sprite.__init__(self)
 		beams.add(self)
+		self.ChannelE = pygame.mixer.Channel(4)
+		self.tractorSound = pygame.mixer.Sound("resources/Sounds/tractor_beam1.ogg")
 		self.screen = screen
 		self.x = enemy.x
 		self.y = enemy.y + 50
 		self.current_Frame = 0
-		self.spritesheet = spritesheet("Sprites/beam.png",3,1)
-		self.image = pygame.image.load("Sprites/beam collison.png")
+		self.spritesheet = spritesheet("resources/Sprites/beam.png",3,1)
+		self.image = pygame.image.load("resources/Sprites/beam collison.png")
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 1
@@ -391,6 +396,7 @@ class Beam(pygame.sprite.Sprite):
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		self.current_Frame = self.current_Frame + 1
 		self.rect.center = ((self.x,self.y))
+		self.ChannelE.play(self.tractorSound)
 		if self.current_Frame % 60 == 0:
 			self.current_Frame = 0
 		if self.current_Frame % 20 == 0 :
@@ -423,6 +429,9 @@ def enemyDeath():
 	
 def playerDeath():
 	if pygame.sprite.groupcollide(enemyBullets, players, True, pygame.sprite.collide_mask):
+		playerDied = pygame.mixer.Sound("resources/Sounds/fighter_destroyed.ogg")
+		ChannelG = pygame.mixer.Channel(6)
+		ChannelG.play(playerDied)
 		return True
 	elif pygame.sprite.groupcollide(beams, players, False, False, pygame.sprite.collide_mask):
 		return True

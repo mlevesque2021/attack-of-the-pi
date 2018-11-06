@@ -176,14 +176,14 @@ class Game():
 				self.events(Console)
 				if (len(Sprites.enemys) < 1):
 					self.waves += 1
+					Sprites.bullets.empty()
 					myfont = pygame.font.Font("resources/Fonts/ScifiAdventure.otf", 24)
 					textsurface = myfont.render("WAVE {}".format(self.waves), False, (255, 255, 255))
 					self.screen.blit(textsurface,(395,215))
 					pygame.display.update()
 					sleep(2)
-				Sprites.GenLevel(self.screen, self.waves)
+					Sprites.GenLevel(self.screen, self.waves)
 				self.events(Console)
-				Sprites.GenLevel(self.screen, self.waves)
 				if Sprites.enemyDeath():
 					#happens when enemy dies
 					self.score = self.score + 5

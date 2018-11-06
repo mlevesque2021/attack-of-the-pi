@@ -66,6 +66,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
+		self.linkPlayer()
 		
 	def linkPlayer(self):
 		self.linked = Player2(self)
@@ -91,12 +92,11 @@ class Player(pygame.sprite.Sprite):
 				self.kill()
 			if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
 				self.kill()
-		else:
-			if pygame.sprite.groupcollide(players, enemyBullets,False, True, pygame.sprite.collide_mask):
+		elif self.isLinked == True:
+			if pygame.sprite.groupcollide(players, enemyBullets, False, False, pygame.sprite.collide_mask):
 				global dropLock
 				dropLock = 0
 				self.linked.kill()
-				self.linked = None
 				self.isLinked = False
 			
 		self.x = self.x + self.xVel
@@ -142,6 +142,7 @@ class Player2(pygame.sprite.Sprite):
 	def update(self):
 		self.x = self.player.x + 15
 		self.y = self.player.y
+		self.rect.center = ((self.x,self.y))
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		
 class Enemy(pygame.sprite.Sprite):

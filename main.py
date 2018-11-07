@@ -36,7 +36,7 @@ class Menu(Frame):
 				self.l.pack(side = BOTTOM, fill=X)
 	
  		def CreateGame(self):
-			Game(score= 0, lives= 5, waves = 0)
+			Game(score= 0, lives= 5, waves = 1)
 
 				
 
@@ -58,6 +58,7 @@ class Game():
 		self.lives = lives
 		self.waves = waves
 		self.running = True
+		self.gameOver = False
 		self.dead = False
 		self.play()
 
@@ -156,11 +157,17 @@ class Game():
 			self.player = Sprites.Player(265,430, self.screen)
 			global Console
 			self.running = True
+			current_frame = 0
+			time = 0
 			while self.running:
 				#screen.blit(background,background_rect) ---- When the FPS was ramped up this was not needed and actually was the cause of our screen tearing
 				pygame.display.update()
 				y1 += 5
 				y += 5
+				current_frame = current_frame + 1
+				if current_frame % 60 == 0:
+					current_frame = 0
+					time = time + 1
 				self.screen.blit(self.background,(x,y))
 				self.screen.blit(self.background,(x1,y1))
 				Sprites.players.update()
@@ -175,30 +182,38 @@ class Game():
 				self.life_counter(self.screen, self.lives)
 				self.wave_counter(self.screen, self.waves)
 				self.events(Console)
-				if (len(Sprites.enemys) < 1):
+				if (len(Sprites.enemys) < 1 and time > 2):
+					time = 0
 					self.waves += 1
 					Sprites.bullets.empty()
+					self.dead = True
+				elif (len(Sprites.enemys) < 1 and time < 2):
 					myfont = pygame.font.Font("resources/Fonts/ScifiAdventure.otf", 24)
 					textsurface = myfont.render("WAVE {}".format(self.waves), False, (255, 255, 255))
 					self.screen.blit(textsurface,(395,215))
 					pygame.display.update()
-					sleep(2)
+				elif (len(Sprites.enemys) < 1 and time == 2 and current_frame == 0):
 					Sprites.GenLevel(self.screen, self.waves)
+					Sprites.enemys.update()
+					self.dead = False
 				self.events(Console)
 				if Sprites.enemyDeath():
 					#happens when enemy dies
 					self.score = self.score + 5
 					self.ChannelB.play(self.alienDestroyed)
-				if Sprites.playerDeath():
+				if Sprites.playerDeath(self.player):
 					if self.lives > 0:
 						#happens when player dies but the game is not over
 						self.lives = self.lives - 1
 						self.player = Sprites.Player(250,430, self.screen)
 					else:
 						#happens when game is over
-						self.dead = True
-						self.ChannelC.play(self.playerDestroyed)
-						
+						self.gameOver = True
+				if self.gameOver == True:
+					self.dead = True
+					myfont = pygame.font.Font("resources/Fonts/ScifiAdventure.otf", 24)
+					textsurface = myfont.render("GAME OVER", False, (255, 255, 255))
+					self.screen.blit(textsurface,(395,215))
 				if y > h:
 					y = -h
 				if y1 > h:

@@ -67,12 +67,16 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
+		#self.linkPlayer()
 		
 	def linkPlayer(self):
 		self.linked = Player2(self)
 		self.isLinked = True
 		global dropLock
 		dropLock = 1
+	
+	def killLink(self):
+		self.isLinked = False
 
 	def shoot(self):
 		Bullet(self, self.screen)
@@ -95,11 +99,8 @@ class Player(pygame.sprite.Sprite):
 			if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
 				self.kill()
 		elif self.isLinked == True:
-			if pygame.sprite.groupcollide(players, enemyBullets, False, False, pygame.sprite.collide_mask):
-				dropLock = 0
-				self.linked.willDie()
-				self.isLinked = False
-			
+			beams.empty()
+			ships.empty()
 		self.x = self.x + self.xVel
 		self.y = self.y + self.yVel
 		self.rect.center = ((self.x,self.y))
@@ -442,14 +443,17 @@ def enemyDeath():
 	else:
 		return False
 	
-def playerDeath():
-	if pygame.sprite.groupcollide(enemyBullets, players, True, pygame.sprite.collide_mask):
+def playerDeath(player):
+	global dropLock
+	if dropLock == 0 and pygame.sprite.groupcollide(enemyBullets, players, False, pygame.sprite.collide_mask):
 		playerDied = pygame.mixer.Sound("resources/Sounds/fighter_destroyed.ogg")
 		ChannelG = pygame.mixer.Channel(6)
 		ChannelG.play(playerDied)
 		return True
-	if pygame.sprite.groupcollide(enemyBullets, players, False, False, pygame.sprite.collide_mask):
-		return True
+	elif dropLock == 1 and pygame.sprite.groupcollide(players, enemyBullets, False, pygame.sprite.collide_mask):
+		player.killLink()
+		linkedPlayers.empty()
+		dropLock = 0
 	elif pygame.sprite.groupcollide(beams, players, False, False, pygame.sprite.collide_mask):
 		return True
 	else:

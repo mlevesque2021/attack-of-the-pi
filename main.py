@@ -164,6 +164,7 @@ class Game():
 				self.screen.blit(self.background,(x,y))
 				self.screen.blit(self.background,(x1,y1))
 				Sprites.players.update()
+				Sprites.linkedPlayers.update()
 				Sprites.bullets.update()
 				Sprites.enemys.update()
 				Sprites.enemyBullets.update()

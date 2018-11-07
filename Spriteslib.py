@@ -14,6 +14,7 @@ bullets = pygame.sprite.Group()
 enemyBullets = pygame.sprite.Group()
 enemys = pygame.sprite.Group()
 players = pygame.sprite.Group()
+linkedPlayers = pygame.sprite.Group()
 beams = pygame.sprite.Group()
 ships = pygame.sprite.Group()
 xPos = [x * 48 for x in range(2,20)]
@@ -66,7 +67,6 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
-		self.linkPlayer()
 		
 	def linkPlayer(self):
 		self.linked = Player2(self)
@@ -80,6 +80,7 @@ class Player(pygame.sprite.Sprite):
 			Bullet(self.linked, self.screen)
 		
 	def update(self):
+		global dropLock
 		if (self.x > 800):
 			self.x = 150
 		elif (self.x < 150):
@@ -87,6 +88,7 @@ class Player(pygame.sprite.Sprite):
 		if self.isLinked == False:
 			if pygame.sprite.spritecollideany(self, beams, pygame.sprite.collide_mask):
 				Captured(self.screen, self)
+				dropLock = 1
 				self.ChannelF.play(self.fighter_captured)
 				pygame.sprite.groupcollide(beams, players, True, False, pygame.sprite.collide_mask)
 				self.kill()
@@ -94,9 +96,8 @@ class Player(pygame.sprite.Sprite):
 				self.kill()
 		elif self.isLinked == True:
 			if pygame.sprite.groupcollide(players, enemyBullets, False, False, pygame.sprite.collide_mask):
-				global dropLock
 				dropLock = 0
-				self.linked.kill()
+				self.linked.willDie()
 				self.isLinked = False
 			
 		self.x = self.x + self.xVel
@@ -124,7 +125,7 @@ class Player2(pygame.sprite.Sprite):
 
 	def __init__(self, player):
 		pygame.sprite.Sprite.__init__(self)
-		players.add(self)
+		linkedPlayers.add(self)
 		self.x = player.x + 15
 		self.y = player.y
 		self.player = player
@@ -139,9 +140,14 @@ class Player2(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
 
+	def willDie(self):
+		self.kill()
+
 	def update(self):
 		self.x = self.player.x + 15
 		self.y = self.player.y
+		if pygame.sprite.spritecollideany(self, enemyBullets, pygame.sprite.collide_mask):
+				self.kill()
 		self.rect.center = ((self.x,self.y))
 		self.spritesheet.draw(self.screen, self.index % self.spritesheet.totalCellCount, self.x, self.y, CENTER_HANDLE)
 		

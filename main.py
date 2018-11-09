@@ -127,10 +127,10 @@ class Game():
 							self.ChannelA.play(self.laser)
 
 					if mstatus == "Right":
-							self.player.xVel = 1
+							self.player.xVel = 5
 							
 					elif mstatus == "Left":
-							self.player.xVel = -1
+							self.player.xVel = -5
 
 					else:
 							self.player.xVel = 0

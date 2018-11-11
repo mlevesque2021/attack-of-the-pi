@@ -67,7 +67,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.mask = pygame.mask.from_surface(self.image)
 		self.index = 7
-		#self.linkPlayer()
+		self.linkPlayer()
 		
 	def linkPlayer(self):
 		self.linked = Player2(self)
@@ -451,8 +451,14 @@ def playerDeath(player):
 		ChannelG.play(playerDied)
 		return True
 	elif dropLock == 1 and pygame.sprite.groupcollide(players, enemyBullets, False, pygame.sprite.collide_mask):
-		player.killLink()
 		linkedPlayers.empty()
+		for i in players:
+			i.killLink()
+		dropLock = 0
+	elif dropLock == 1 and pygame.sprite.groupcollide(linkedPlayers, enemyBullets, False, pygame.sprite.collide_mask):
+		linkedPlayers.empty()
+		for i in players:
+			i.killLink()
 		dropLock = 0
 	elif pygame.sprite.groupcollide(beams, players, False, False, pygame.sprite.collide_mask):
 		return True
